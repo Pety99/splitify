@@ -3,6 +3,7 @@ import MainPage from '../MainPage/MainPage';
 import LoginPage from '../LoginPage/LoginPage';
 
 import {auth, } from '../../firebase';
+import {createUser} from '../../database'
 
 
 function App(){
@@ -12,6 +13,7 @@ function App(){
     useEffect(() =>{
         const unregisterAuthObserver = auth.onAuthStateChanged(user => {
             setSignedIn(!!user);
+            user && createUser(user);
         });
         return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
     }, []);
