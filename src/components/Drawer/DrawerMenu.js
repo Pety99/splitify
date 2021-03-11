@@ -13,6 +13,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import UserInfo from '../../components/UserInfo/UserInfo';
 import Groups from '../../components/Groups/Groups'
+import CreateGroup from '../../components/CreateGroup/CreateGroup'
 
 import { auth } from '../../firebase'
 import { Box, Button, } from '@material-ui/core';
@@ -78,16 +79,15 @@ function ResponsiveDrawer() {
     const drawer = (
         <Box height='100vh' display='flex' flexDirection="column">
             <div className={classes.toolbar} />
-            <Divider />
             <UserInfo />
             <Divider />
             <Groups />
             <Divider />
             <Box display="flex" justifyContent='center' m={2} >
-                <Button variant="contained" color="primary">Create Group</Button>
+                <CreateGroup/>
             </Box>
             <Box display="flex" justifyContent='center' m={2} mt='auto'>
-                <Button startIcon={<ExitToApp/>} color="secondary">Sign Out</Button>
+                <Button startIcon={<ExitToApp/>} color="secondary" onClick={() => auth.signOut()}>Sign Out</Button>
             </Box>
         </Box>
     );
