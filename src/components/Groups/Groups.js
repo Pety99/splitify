@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, makeStyles, Paper } from "@material-ui/core";
-import { ExpandLess, ExpandMore, Group, FiberManualRecord, } from "@material-ui/icons";
+import { ExpandLess, ExpandMore, Group, FiberManualRecord,} from "@material-ui/icons";
 
 function groups() {
     const [groups, setGroups] = useState([]);

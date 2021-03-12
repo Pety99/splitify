@@ -10,6 +10,7 @@ import UsersList from './UsersList';
 import { useState } from 'react';
 import ValidatingInput from './ValidatingInput';
 
+import {createGroup, updateGroup} from '../../database';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -65,6 +66,7 @@ function SimpleDialog(props) {
 
     // handles the click of cancel and save buttons
     const handleExitClick = (value) => {
+        setUsers([currentUserToDisplay]);
         console.log(value);
         if (value) {
             if(groupName == ''){
@@ -110,7 +112,7 @@ function SimpleDialog(props) {
             <UsersList currentUser={currentUser} users={users} handleDelete={handleDelete} />
             <Box className={classes.buttons}>
                 <Button color="secondary" className={classes.button} onClick={() => handleExitClick()}>Cancel</Button>
-                <Button variant="contained" color="primary" className={classes.button} onClick={() => handleExitClick(users)}>Save</Button>
+                <Button variant="contained" color="primary" className={classes.button} onClick={() => handleExitClick({users : users, groupName : groupName})}>Save</Button>
             </Box>
         </Dialog>
     );
@@ -129,7 +131,34 @@ function CreateGroup(props) {
         setOpen(true);
     };
 
-    const handleClose = () => {
+    /*
+    [
+        {
+            "key": "LRcelLR3xbaRccpjGGSgOPHLH5L2",
+            "value": {
+                "email": "abordanpeter@gmail.com",
+                "profile_picture": "https://lh3.googleusercontent.com/a-/AOh14GhVUy7cSQOB2S8UjZcT5HT1JJuJAP4xpxczvUA4Qw=s96-c",
+                "username": "Péter Abordán"
+            }
+        },
+        {
+            "key": "SgfEGsrjwjSDPN2E6wpWVtX9uh82",
+            "value": {
+                "email": "asd@gmail.com",
+                "username": "asd"
+            }
+        }
+    ]
+    */
+    const handleClose = (data) => {
+        if(data){
+            const currentUser = data.users[0];
+            createGroup(currentUser).then(
+                (newGroupKey) => {
+                    updateGroup(newGroupKey, data)
+                }
+            );
+        }
         setOpen(false);
     };
 

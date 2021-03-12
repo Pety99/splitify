@@ -13,6 +13,7 @@ function App(){
     useEffect(() =>{
         const unregisterAuthObserver = auth.onAuthStateChanged(user => {
             setSignedIn(!!user);
+
             user && createUser(user);
         });
         return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
