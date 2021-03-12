@@ -1,30 +1,21 @@
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-import PersonIcon from '@material-ui/icons/Person';
-import { blue } from '@material-ui/core/colors';
-import { Box, IconButton, ListItemSecondaryAction, TextField } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import AddUser from './AddUser';
-import { Delete } from '@material-ui/icons';
+import UsersList from './UsersList';
+import { useState } from 'react';
+import ValidatingInput from './ValidatingInput';
+
 
 
 const useStyles = makeStyles((theme) => ({
     title: {
         textAlign: 'center',
         fontSize: '4rem'
-    },
-    avatar: {
-        backgroundColor: blue[100],
-        color: blue[600],
     },
     buttons: {
         display: 'flex',
@@ -33,44 +24,80 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(2)
     },
-    listItem: {
-        padddingRight: theme.spacing(3),
-        paddingLeft: theme.spacing(3),
-    },
-    icon: {
-        marginRight: theme.spacing(1.5),
-        marginLeft: theme.spacing(1.5),
-    },
-    user: {
-        overflow: 'hidden'
-    },
-    textField: {
-        marginRight: theme.spacing(3),
-        marginLeft: theme.spacing(3),
-        marginBottom: theme.spacing(2),
-    }
+   
 }));
 
 function SimpleDialog(props) {
     const classes = useStyles();
-    const { onClose, open } = props;
 
-    const [users, setUsers] = React.useState([]);
+    const { onClose, open, currentUser } = props;
+
+    // Get the data of the current user, and automatically add it to the list
+    const currentUserToDisplay = {
+        key: currentUser.uid,
+        value: {
+            email: currentUser.email,
+            profile_picture: currentUser.photoURL,
+            username: currentUser.displayName,
+        }
+    }
+
+    // Stores the data of the added users to the list
+    const [users, setUsers] = useState([currentUserToDisplay]);
+    const [groupName, setGroupName] = useState('');
+    const [inputError, setInputError] = useState(false);
+
+    //handles the change of text in the group name
+    const handleGroupNameChange = (text) => {
+        if (text == '') {
+            setInputError(true);
+        }
+        else {
+            setInputError(false);
+        }
+        setGroupName(text);
+    }
 
     const handleClose = () => {
+        setUsers([currentUserToDisplay]);
         onClose();
     };
 
-    const handleListItemClick = (value) => {
-        onClose(value);
+    // handles the click of cancel and save buttons
+    const handleExitClick = (value) => {
+        console.log(value);
+        if (value) {
+            if(groupName == ''){
+                setInputError(true);
+            }
+            else{
+                onClose(value);
+            }
+        } else {
+            onClose(value);
+        }
     };
 
+    // Adds a user to the list if its not already in there
     const handleAddUser = (user) => {
-        if (!users.includes(user)) {
+        if (!userAlreadyAdded(user)) {
+            console.log(user);
+            console.log(currentUser)
             setUsers([...users, user]);
         }
     }
 
+    // Checks if a user is already present in the users list
+    const userAlreadyAdded = (user) => {
+        for (const u of users) {
+            if (u.key === user.key) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Deletes a user from the users list
     const handleDelete = (user) => {
         setUsers(users.filter(e => e != user));
     }
@@ -78,30 +105,13 @@ function SimpleDialog(props) {
     return (
         <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
             <DialogTitle className={classes.title} id="simple-dialog-title">Create new group</DialogTitle>
-            <TextField id="outlined-basic" label="Group name" variant="outlined" className={classes.textField}/>
+            <ValidatingInput handleChange={handleGroupNameChange} error={inputError}/>
             <AddUser handleClickAddUser={handleAddUser} />
-            <List>
-                {users.map((user) => (
-                    <ListItem key={Object.keys(Object.keys(user)[0])} className={classes.listItem}>
-                        <ListItemAvatar>
-                            <Avatar className={classes.avatar} src={Object.values(user)[0]['profile_picture']}>
-                                <PersonIcon />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText className={classes.user} primary={Object.values(user)[0].username } />
-                        <ListItemSecondaryAction className={classes.icon}>
-                            <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(user)}>
-                                <Delete />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                ))}
-            </List>
+            <UsersList currentUser={currentUser} users={users} handleDelete={handleDelete} />
             <Box className={classes.buttons}>
-                <Button color="secondary" className={classes.button} onClick={() => handleListItemClick()}>Cancel</Button>
-                <Button variant="contained" color="primary" className={classes.button} onClick={() => handleListItemClick(users)}>Save</Button>
+                <Button color="secondary" className={classes.button} onClick={() => handleExitClick()}>Cancel</Button>
+                <Button variant="contained" color="primary" className={classes.button} onClick={() => handleExitClick(users)}>Save</Button>
             </Box>
-
         </Dialog>
     );
 }
@@ -109,10 +119,11 @@ function SimpleDialog(props) {
 SimpleDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
+    currentUser: PropTypes.object.isRequired,
 };
 
-export default function CreateGroup() {
-    const [open, setOpen] = React.useState(false);
+function CreateGroup(props) {
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -125,7 +136,13 @@ export default function CreateGroup() {
     return (
         <Box display="flex" justifyContent='center' m={2} >
             <Button variant="contained" color="primary" onClick={handleClickOpen}>Create Group</Button>
-            <SimpleDialog open={open} onClose={handleClose} />
+            <SimpleDialog open={open} onClose={handleClose} currentUser={props.currentUser} />
         </Box>
     );
 }
+
+CreateGroup.propTypes = {
+    currentUser: PropTypes.object.isRequired
+}
+
+export default CreateGroup;

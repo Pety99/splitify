@@ -40,6 +40,9 @@ function AddUser(props) {
         if (re.test(String(textFieldContet).toLowerCase())) {
             getUserByEmail(textFieldContet, (val) => val ? handleClickAddUser(val) : setSnackBarIsOpen(true));
         }
+        else{
+            setSnackBarIsOpen(true)
+        }
 
     }
 
@@ -48,10 +51,13 @@ function AddUser(props) {
             <NoUserFound close={() => { setSnackBarIsOpen(false) }} isOpen={snackBarIsopen} />
             <Grid container alignItems="flex-end" justifycontent="space-between">
                 <Grid item xs={8} sm={10} className={classes.wide}>
-                    <TextField id="outlined-search" label="Email of user" type="search" variant="outlined"
+                    <TextField id="outlined-search"
+                        label="Email of user"
+                        type="search"
+                        variant="outlined"
                         onChange={handleTextFiledChange}
                         onKeyDown={addUser}
-                        autoFocus={true}
+                        autoComplete='off'
                         InputProps={{
                             form: {
                                 autocomplete: 'off',

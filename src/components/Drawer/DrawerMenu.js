@@ -84,7 +84,7 @@ function ResponsiveDrawer() {
             <Groups />
             <Divider />
             <Box display="flex" justifyContent='center' m={2} >
-                <CreateGroup/>
+                <CreateGroup currentUser={auth.currentUser}/>
             </Box>
             <Box display="flex" justifyContent='center' m={2} mt='auto'>
                 <Button startIcon={<ExitToApp/>} color="secondary" onClick={() => auth.signOut()}>Sign Out</Button>
