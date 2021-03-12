@@ -12,7 +12,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import PersonIcon from '@material-ui/icons/Person';
 import { blue } from '@material-ui/core/colors';
-import { Box, IconButton, ListItemSecondaryAction } from '@material-ui/core';
+import { Box, IconButton, ListItemSecondaryAction, TextField } from '@material-ui/core';
 import AddUser from './AddUser';
 import { Delete } from '@material-ui/icons';
 
@@ -20,6 +20,7 @@ import { Delete } from '@material-ui/icons';
 const useStyles = makeStyles((theme) => ({
     title: {
         textAlign: 'center',
+        fontSize: '4rem'
     },
     avatar: {
         backgroundColor: blue[100],
@@ -40,16 +41,21 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1.5),
         marginLeft: theme.spacing(1.5),
     },
-    email: {
+    user: {
         overflow: 'hidden'
     },
+    textField: {
+        marginRight: theme.spacing(3),
+        marginLeft: theme.spacing(3),
+        marginBottom: theme.spacing(2),
+    }
 }));
 
 function SimpleDialog(props) {
     const classes = useStyles();
     const { onClose, open } = props;
 
-    const [emails, setEmails] = React.useState(['username@gmail.com', 'user02@gmail.com']);
+    const [users, setUsers] = React.useState([]);
 
     const handleClose = () => {
         onClose();
@@ -59,31 +65,32 @@ function SimpleDialog(props) {
         onClose(value);
     };
 
-    const handleAddUser = (email) => {
-        if (!emails.includes(email)) {
-            setEmails([...emails, email]);
+    const handleAddUser = (user) => {
+        if (!users.includes(user)) {
+            setUsers([...users, user]);
         }
     }
 
-    const handleDelete = (email) => {
-        setEmails(emails.filter(e => e != email));
+    const handleDelete = (user) => {
+        setUsers(users.filter(e => e != user));
     }
 
     return (
         <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
-            <DialogTitle className={classes.title} id="simple-dialog-title">Create a new Group</DialogTitle>
+            <DialogTitle className={classes.title} id="simple-dialog-title">Create new group</DialogTitle>
+            <TextField id="outlined-basic" label="Group name" variant="outlined" className={classes.textField}/>
             <AddUser handleClickAddUser={handleAddUser} />
             <List>
-                {emails.map((email) => (
-                    <ListItem key={email} className={classes.listItem}>
+                {users.map((user) => (
+                    <ListItem key={Object.keys(Object.keys(user)[0])} className={classes.listItem}>
                         <ListItemAvatar>
-                            <Avatar className={classes.avatar}>
+                            <Avatar className={classes.avatar} src={Object.values(user)[0]['profile_picture']}>
                                 <PersonIcon />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText className={classes.email} primary={email} />
+                        <ListItemText className={classes.user} primary={Object.values(user)[0].username } />
                         <ListItemSecondaryAction className={classes.icon}>
-                            <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(email)}>
+                            <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(user)}>
                                 <Delete />
                             </IconButton>
                         </ListItemSecondaryAction>
@@ -92,7 +99,7 @@ function SimpleDialog(props) {
             </List>
             <Box className={classes.buttons}>
                 <Button color="secondary" className={classes.button} onClick={() => handleListItemClick()}>Cancel</Button>
-                <Button variant="contained" color="primary" className={classes.button} onClick={() => handleListItemClick(emails)}>Save</Button>
+                <Button variant="contained" color="primary" className={classes.button} onClick={() => handleListItemClick(users)}>Save</Button>
             </Box>
 
         </Dialog>

@@ -4,8 +4,10 @@ import { AddCircle } from "@material-ui/icons"
 import { useState } from "react";
 import NoUserFound from './NoUserFound';
 
+import { getUserByEmail } from '../../database'
+
 const useStyles = makeStyles((theme) => ({
-    container:{
+    container: {
 
     },
     wide: {
@@ -33,20 +35,19 @@ function AddUser(props) {
         if (e && e.keyCode && e.keyCode != 13) {
             return;
         }
-        if (textFieldContet.includes('@')) {
-            handleClickAddUser(textFieldContet);
-        }
-        else {
-            setSnackBarIsOpen(true);
+        // check for email regex
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (re.test(String(textFieldContet).toLowerCase())) {
+            getUserByEmail(textFieldContet, (val) => val ? handleClickAddUser(val) : setSnackBarIsOpen(true));
         }
 
     }
 
     return (
-        <Container style={{padding: '0px'}}>
+        <Container style={{ padding: '0px' }}>
             <NoUserFound close={() => { setSnackBarIsOpen(false) }} isOpen={snackBarIsopen} />
-            <Grid container alignItems="flex-end">
-                <Grid item xs={10} className={classes.wide}>
+            <Grid container alignItems="flex-end" justifycontent="space-between">
+                <Grid item xs={8} sm={10} className={classes.wide}>
                     <TextField id="outlined-search" label="Email of user" type="search" variant="outlined"
                         onChange={handleTextFiledChange}
                         onKeyDown={addUser}
@@ -59,19 +60,16 @@ function AddUser(props) {
                         className={classes.wide}
                     />
                 </Grid>
-                <Grid item xs={1.5}>
+                <Grid item style={{ marginLeft: 'auto', marginRight: '14px' }}>
                     <IconButton
                         aria-label="add user button"
                         onClick={addUser}
-                        style={{
-                            marginLeft: '20px'
-                        }}
                     >
-                        <AddCircle 
-                        style={{
-                            width: '30px',
-                            height: '30px',
-                        }}/>
+                        <AddCircle
+                            style={{
+                                width: '30px',
+                                height: '30px',
+                            }} />
                     </IconButton>
                 </Grid>
             </Grid>

@@ -10,3 +10,9 @@ export function createUser(user) {
         profile_picture: user.photoURL
     });
 }
+
+export const getUserByEmail = function(email, callback){
+    db.ref().child('users').orderByChild('email').equalTo(email).once('value', (snap) => {
+        callback( snap.val() );
+    });
+}
