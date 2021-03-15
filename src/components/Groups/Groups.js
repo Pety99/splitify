@@ -1,29 +1,37 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 
 import { Collapse, List, ListItem, ListItemIcon, ListItemText, makeStyles, Paper } from "@material-ui/core";
-import { ExpandLess, ExpandMore, Group, FiberManualRecord,} from "@material-ui/icons";
+import { ExpandLess, ExpandMore, Group, FiberManualRecord, } from "@material-ui/icons";
+
+import { auth } from '../../firebase';
+import { subscribeToEvent, unsubscribeFromEvents, findGroupById } from '../../database';
 
 function groups() {
-    const [groups, setGroups] = useState([]);
-    const [open, setOpen] = useState(true);
-
-
     const useStyle = makeStyles((theme) => ({
         nested: {
             paddingLeft: theme.spacing(4),
         },
     }));
+    const classes = useStyle();
+
+    const [groups, setGroups] = useState([]);
+    const [open, setOpen] = useState(true);
 
     const handleClick = () => {
         setOpen(!open);
     };
 
-    const classes = useStyle();
+    const handleGroupCreated = async (newGroup) => {
+        const newGroupData = await findGroupById(newGroup.key);
+        if(!groups.includes(newGroupData) && newGroupData.value != true){
+            setGroups((previousGroups) => [...previousGroups, newGroupData]);
+        }
+    }
 
     useEffect(() => {
-        setGroups(['asd', 'asd2', 'asd3']);
-        return [];
-    }, [])
+        subscribeToEvent('child_added', `/users/${auth.currentUser.uid}/groups`, [handleGroupCreated]);
+        return () => { unsubscribeFromEvents('child_added', `/users/${auth.currentUser.uid}/groups`) };
+    }, []);
 
     return (
         <List>
@@ -34,13 +42,13 @@ function groups() {
                 <ListItemText primary="Groups" />
                 {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Paper style={{maxHeight: '50vh', overflow: 'auto', boxShadow : 'none'}} className="paper">
+            <Paper style={{ maxHeight: '50vh', overflow: 'auto', boxShadow: 'none' }} className="paper">
                 <Collapse in={open} timeout="auto" unmountOnExit >
                     <List component="div" disablePadding>
-                        {groups.map((text) => (
-                            <ListItem button key={text} className={classes.nested}>
+                        {groups.map((g) => (
+                            <ListItem button key={g.key} className={classes.nested}>
                                 <ListItemIcon><FiberManualRecord /></ListItemIcon>
-                                <ListItemText primary={text} />
+                                <ListItemText primary={g.value.name} />
                             </ListItem>
                         ))}
                     </List>

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import firebase from 'firebase/app';
 
 import 'firebase/analytics';
@@ -6,7 +7,7 @@ import 'firebase/auth';
 import 'firebase/database';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCwK3y2Fzi06muPKcdCnfXa6nvaifTPlQs',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: 'function-test-b568e.firebaseapp.com',
   databaseURL: 'https://function-test-b568e-default-rtdb.firebaseio.com',
   projectId: 'function-test-b568e',

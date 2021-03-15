@@ -10,7 +10,7 @@ import UsersList from './UsersList';
 import { useState } from 'react';
 import ValidatingInput from './ValidatingInput';
 
-import {createGroup, updateGroup} from '../../database';
+import {createGroup} from '../../database';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -66,16 +66,16 @@ function SimpleDialog(props) {
 
     // handles the click of cancel and save buttons
     const handleExitClick = (value) => {
-        setUsers([currentUserToDisplay]);
-        console.log(value);
         if (value) {
             if(groupName == ''){
                 setInputError(true);
             }
             else{
+                setUsers([currentUserToDisplay]);
                 onClose(value);
             }
         } else {
+            setUsers([currentUserToDisplay]);
             onClose(value);
         }
     };
@@ -83,8 +83,6 @@ function SimpleDialog(props) {
     // Adds a user to the list if its not already in there
     const handleAddUser = (user) => {
         if (!userAlreadyAdded(user)) {
-            console.log(user);
-            console.log(currentUser)
             setUsers([...users, user]);
         }
     }
@@ -131,33 +129,10 @@ function CreateGroup(props) {
         setOpen(true);
     };
 
-    /*
-    [
-        {
-            "key": "LRcelLR3xbaRccpjGGSgOPHLH5L2",
-            "value": {
-                "email": "abordanpeter@gmail.com",
-                "profile_picture": "https://lh3.googleusercontent.com/a-/AOh14GhVUy7cSQOB2S8UjZcT5HT1JJuJAP4xpxczvUA4Qw=s96-c",
-                "username": "Péter Abordán"
-            }
-        },
-        {
-            "key": "SgfEGsrjwjSDPN2E6wpWVtX9uh82",
-            "value": {
-                "email": "asd@gmail.com",
-                "username": "asd"
-            }
-        }
-    ]
-    */
     const handleClose = (data) => {
         if(data){
             const currentUser = data.users[0];
-            createGroup(currentUser).then(
-                (newGroupKey) => {
-                    updateGroup(newGroupKey, data)
-                }
-            );
+            createGroup(currentUser, data)
         }
         setOpen(false);
     };
