@@ -1,10 +1,9 @@
-import PropTypes from 'prop-types'
-import { Button, IconButton, Snackbar } from "@material-ui/core";
-import { Close } from "@material-ui/icons"
-import { Fragment } from "react";
+import PropTypes from 'prop-types';
+import { Button, IconButton, Snackbar } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
+import { Fragment } from 'react';
 
-function NoUserFound({ close, isOpen}) {
-
+function NoUserFound({ close, isOpen }) {
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -13,7 +12,7 @@ function NoUserFound({ close, isOpen}) {
         close();
     };
 
-    const message = "User not found! \n Please try a different email adress."
+    const message = 'User not found! \n Please try a different email adress.';
 
     return (
         <Snackbar
@@ -28,10 +27,19 @@ function NoUserFound({ close, isOpen}) {
             style={{ whiteSpace: 'pre-line' }}
             action={
                 <Fragment>
-                    <Button color="secondary" size="small" onClick={handleClose}>
+                    <Button
+                        color="secondary"
+                        size="small"
+                        onClick={handleClose}
+                    >
                         Got it!
                     </Button>
-                    <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                    <IconButton
+                        size="small"
+                        aria-label="close"
+                        color="inherit"
+                        onClick={handleClose}
+                    >
                         <Close fontSize="small" />
                     </IconButton>
                 </Fragment>

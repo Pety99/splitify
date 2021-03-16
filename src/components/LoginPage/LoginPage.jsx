@@ -1,4 +1,3 @@
-
 import { auth, uiConfig } from '../../firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 

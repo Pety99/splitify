@@ -12,11 +12,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import UserInfo from '../../components/UserInfo/UserInfo';
-import Groups from '../../components/Groups/Groups'
-import CreateGroup from '../../components/CreateGroup/CreateGroup'
+import Groups from '../../components/Groups/Groups';
+import CreateGroup from '../../components/CreateGroup/CreateGroup';
 
-import { auth } from '../../firebase'
-import { Box, Button, } from '@material-ui/core';
+import { auth } from '../../firebase';
+import { Box, Button } from '@material-ui/core';
 import { ExitToApp } from '@material-ui/icons';
 import Content from '../Content/Content';
 
@@ -71,47 +71,62 @@ function ResponsiveDrawer() {
     const classes = useStyles();
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [selectedGroup, setSelecetedGroup] = useState('');
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
-
     const drawer = (
-        <Box height='100vh' display='flex' flexDirection="column">
+        <Box height="100vh" display="flex" flexDirection="column">
             <div className={classes.toolbar} />
             <UserInfo />
             <Divider />
-            <Groups />
+            <Groups setGroup={setSelecetedGroup} />
             <Divider />
-            <Box display="flex" justifyContent='center' m={2} >
+            <Box display="flex" justifyContent="center" m={2}>
                 <CreateGroup currentUser={auth.currentUser} />
             </Box>
-            <Box display="flex" justifyContent='center' m={2} mt='auto'>
-                <Button startIcon={<ExitToApp />} color="secondary" onClick={() => auth.signOut()}>Sign Out</Button>
+            <Box display="flex" justifyContent="center" m={2} mt="auto">
+                <Button
+                    startIcon={<ExitToApp />}
+                    color="secondary"
+                    onClick={() => auth.signOut()}
+                >
+                    Sign Out
+                </Button>
             </Box>
         </Box>
     );
 
-    const container = window !== undefined ? () => window.document.body : undefined;
+    const container =
+        window !== undefined ? () => window.document.body : undefined;
 
     return (
         <div className={classes.root}>
             <CssBaseline />
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleDrawerToggle}>
+                    <IconButton
+                        edge="start"
+                        className={classes.menuButton}
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={handleDrawerToggle}
+                    >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" className={classes.title}></Typography>
+                    <Typography
+                        variant="h6"
+                        className={classes.title}
+                    ></Typography>
                     {auth.currentUser && (
                         <Avatar
                             className={classes.profilePicture}
                             aria-label="account of current user"
                             color="inherit"
                             src={auth.currentUser.photoURL}
-                        >
-                        </Avatar>
+                        ></Avatar>
                     )}
                 </Toolbar>
             </AppBar>
@@ -148,7 +163,7 @@ function ResponsiveDrawer() {
             </nav>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <Content/>
+                <Content currentGroup={selectedGroup} />
             </main>
         </div>
     );

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
-      },
+    },
     profilePicture: {
         backgroundImage: `url(${auth.currentUser.photoURL})`,
         backgroundSize: '100%',
@@ -28,22 +28,28 @@ function AppMenuBar() {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                    <IconButton
+                        edge="start"
+                        className={classes.menuButton}
+                        color="inherit"
+                        aria-label="menu"
+                    >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" className={classes.title}></Typography>
+                    <Typography
+                        variant="h6"
+                        className={classes.title}
+                    ></Typography>
                     {auth.currentUser && (
-                            <IconButton 
-                                className={classes.profilePicture}
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                color="inherit"
-                            >
-                            </IconButton>
+                        <IconButton
+                            className={classes.profilePicture}
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                        ></IconButton>
                     )}
                 </Toolbar>
             </AppBar>

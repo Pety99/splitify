@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -10,22 +9,20 @@ import UsersList from './UsersList';
 import { useState } from 'react';
 import ValidatingInput from './ValidatingInput';
 
-import {createGroup} from '../../database';
-
+import { createGroup } from '../../database';
 
 const useStyles = makeStyles((theme) => ({
     title: {
         textAlign: 'center',
-        fontSize: '4rem'
+        fontSize: '4rem',
     },
     buttons: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     button: {
-        margin: theme.spacing(2)
+        margin: theme.spacing(2),
     },
-   
 }));
 
 function SimpleDialog(props) {
@@ -40,8 +37,8 @@ function SimpleDialog(props) {
             email: currentUser.email,
             profile_picture: currentUser.photoURL,
             username: currentUser.displayName,
-        }
-    }
+        },
+    };
 
     // Stores the data of the added users to the list
     const [users, setUsers] = useState([currentUserToDisplay]);
@@ -52,12 +49,11 @@ function SimpleDialog(props) {
     const handleGroupNameChange = (text) => {
         if (text == '') {
             setInputError(true);
-        }
-        else {
+        } else {
             setInputError(false);
         }
         setGroupName(text);
-    }
+    };
 
     const handleClose = () => {
         setUsers([currentUserToDisplay]);
@@ -67,10 +63,9 @@ function SimpleDialog(props) {
     // handles the click of cancel and save buttons
     const handleExitClick = (value) => {
         if (value) {
-            if(groupName == ''){
+            if (groupName == '') {
                 setInputError(true);
-            }
-            else{
+            } else {
                 setUsers([currentUserToDisplay]);
                 onClose(value);
             }
@@ -85,7 +80,7 @@ function SimpleDialog(props) {
         if (!userAlreadyAdded(user)) {
             setUsers([...users, user]);
         }
-    }
+    };
 
     // Checks if a user is already present in the users list
     const userAlreadyAdded = (user) => {
@@ -95,22 +90,52 @@ function SimpleDialog(props) {
             }
         }
         return false;
-    }
+    };
 
     // Deletes a user from the users list
     const handleDelete = (user) => {
-        setUsers(users.filter(e => e != user));
-    }
+        setUsers(users.filter((e) => e != user));
+    };
 
     return (
-        <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
-            <DialogTitle className={classes.title} id="simple-dialog-title">Create new group</DialogTitle>
-            <ValidatingInput handleChange={handleGroupNameChange} error={inputError}/>
+        <Dialog
+            onClose={handleClose}
+            aria-labelledby="simple-dialog-title"
+            open={open}
+            maxWidth="sm"
+            fullWidth={true}
+        >
+            <DialogTitle className={classes.title} id="simple-dialog-title">
+                Create new group
+            </DialogTitle>
+            <ValidatingInput
+                handleChange={handleGroupNameChange}
+                error={inputError}
+            />
             <AddUser handleClickAddUser={handleAddUser} />
-            <UsersList currentUser={currentUser} users={users} handleDelete={handleDelete} />
+            <UsersList
+                currentUser={currentUser}
+                users={users}
+                handleDelete={handleDelete}
+            />
             <Box className={classes.buttons}>
-                <Button color="secondary" className={classes.button} onClick={() => handleExitClick()}>Cancel</Button>
-                <Button variant="contained" color="primary" className={classes.button} onClick={() => handleExitClick({users : users, groupName : groupName})}>Save</Button>
+                <Button
+                    color="secondary"
+                    className={classes.button}
+                    onClick={() => handleExitClick()}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    onClick={() =>
+                        handleExitClick({ users: users, groupName: groupName })
+                    }
+                >
+                    Save
+                </Button>
             </Box>
         </Dialog>
     );
@@ -130,23 +155,33 @@ function CreateGroup(props) {
     };
 
     const handleClose = (data) => {
-        if(data){
+        if (data) {
             const currentUser = data.users[0];
-            createGroup(currentUser, data)
+            createGroup(currentUser, data);
         }
         setOpen(false);
     };
 
     return (
-        <Box display="flex" justifyContent='center' m={2} >
-            <Button variant="contained" color="primary" onClick={handleClickOpen}>Create Group</Button>
-            <SimpleDialog open={open} onClose={handleClose} currentUser={props.currentUser} />
+        <Box display="flex" justifyContent="center" m={2}>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleClickOpen}
+            >
+                Create Group
+            </Button>
+            <SimpleDialog
+                open={open}
+                onClose={handleClose}
+                currentUser={props.currentUser}
+            />
         </Box>
     );
 }
 
 CreateGroup.propTypes = {
-    currentUser: PropTypes.object.isRequired
-}
+    currentUser: PropTypes.object.isRequired,
+};
 
 export default CreateGroup;
