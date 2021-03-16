@@ -5,11 +5,23 @@ import ReceiptItem from "./ReceiptItem";
 
 
 function ReceiptsList(props) {
-    const [receipts] = useState([{ name: 'rec 1' }, { name: 'rec2' },]);
+    const [receipts] = useState([{
+        name: 'Walmart 1',
+        date: '2017-07-28 02:39:48',
+        logo: 'https://cdn.veryfi.com/logos/us/218078496.jpeg',
+        total: 82.637264234,
+    },
+    {
+        name: 'Walmart 2',
+        date: '2017-07-28 02:39:48',
+        logo: 'https://cdn.veryfi.com/logos/us/218078496.jpeg',
+        total: 82.637264234,
+    },]);
     return (
         <Fragment>
             <p>Receipts</p>
             <ReceiptItem data={receipts[0]} onClickHandler={props.toggleLeftPanel} />
+            <ReceiptItem data={receipts[1]} onClickHandler={props.toggleLeftPanel} />
             <ReceiptItem data={receipts[1]} onClickHandler={props.toggleLeftPanel} />
         </Fragment>
     );

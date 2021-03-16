@@ -2,17 +2,18 @@ import { Fragment } from "react"
 import ReceiptsList from "../Content/ReceiptsList";
 
 import PropTypes from 'prop-types';
+import { Typography } from "@material-ui/core";
 
 function LeftPanel(props) {
     return (
         <Fragment>
-            LeftPanel
-            <ReceiptsList toggleLeftPanel={props.toggleLeftSide}/>
+            <Typography variant="h5" component="p" gutterBottom> Reciepts</Typography>
+            <ReceiptsList toggleLeftPanel={props.toggleLeftSide} />
         </Fragment>
     )
 }
 
 LeftPanel.propTypes = {
-    toggleLeftSide: PropTypes.func,    
+    toggleLeftSide: PropTypes.func,
 }
 export default LeftPanel;
