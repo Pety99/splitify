@@ -1,16 +1,17 @@
 import { Chip, Grid, Hidden, makeStyles, Paper } from '@material-ui/core';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import LeftPanel from '../Panels/LeftPanel';
 import RightPanel from '../Panels/RightPanel';
 import RightPanelForMobile from '../Panels/RightPanelForMobile';
 
 import PropTypes from 'prop-types';
+import Members from '../Members/Members';
 
 const useStyles = makeStyles((theme) => {
     const glass = {
         background: 'rgba( 255, 255, 255, 0.25 )',
         boxShadow: '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
-        backdropFilter: 'blur( 4px )',
+        /*backdropFilter: 'blur( 4px )',*/
         borderRadius: '15px',
         border: '1px solid rgba( 255, 255, 255, 0.18 )',
     };
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => {
     };
 });
 
-function Receipts({ currentGroup }) {
+function Receipts({ currentGroup, groupDeleted }) {
     const classes = useStyles();
 
     const [currentReceipt, setCurrentReceipt] = useState({});
@@ -59,19 +60,16 @@ function Receipts({ currentGroup }) {
         <LeftPanel toggleLeftSide={toggleLeftSide} />
     );
 
-    /**
-     * Only re renders when the currentGroupid changes
-     */
-    useEffect(() => {
-        console.log(currentGroup);
-    }, [currentGroup]);
-
-    return (
+    return currentGroup ? (
         <div className={classes.root}>
             <div>
                 <Chip label="Items" clickable />
                 <Chip label="Analytics" clickable color="primary" />
             </div>
+            <Members
+                currentGroup={currentGroup}
+                groupDeleted={groupDeleted}
+            ></Members>
             <Grid container spacing={3} className={classes.container}>
                 <Grid item xs md={6} lg={4}>
                     <Fragment>{leftSide}</Fragment>
@@ -85,11 +83,14 @@ function Receipts({ currentGroup }) {
                 </Hidden>
             </Grid>
         </div>
+    ) : (
+        <div>placeholder</div>
     );
 }
 
 Receipts.propTypes = {
     currentGroup: PropTypes.object,
+    groupDeleted: PropTypes.func,
 };
 
 export default Receipts;

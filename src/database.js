@@ -57,6 +57,10 @@ export const createUser = function (user) {
     });
 };
 
+export const getUserById = function (id) {
+    return db.ref('users/' + id).once('value');
+};
+
 export const getUserByEmail = function (email, callback) {
     db.ref()
         .child('users')
@@ -154,4 +158,16 @@ export const findGroupById = async function (id) {
     };
 
     return ret;
+};
+
+export const deleteGroup = function (groupKey, membersKeys) {
+    const updates = {};
+
+    updates[`groups/${groupKey}`] = null;
+    for (const key of membersKeys) {
+        updates[`users/${key}/groups/${groupKey}`] = null;
+    }
+    updates[`items/${groupKey}`] = null;
+    updates[`receipts/${groupKey}`] = null;
+    db.ref().update(updates);
 };

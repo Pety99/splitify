@@ -163,7 +163,10 @@ function ResponsiveDrawer() {
             </nav>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <Content currentGroup={selectedGroup} />
+                <Content
+                    currentGroup={selectedGroup}
+                    groupDeleted={() => setSelecetedGroup('')}
+                />
             </main>
         </div>
     );

@@ -47,15 +47,30 @@ function groups({ setGroup }) {
         }
     };
 
+    const handleGroupDeleted = (deletedGroup) => {
+        setGroups((previousGroups) =>
+            previousGroups.filter((g) => g.key != deletedGroup.key)
+        );
+    };
+
     useEffect(() => {
         subscribeToEvent(
             'child_added',
             `/users/${auth.currentUser.uid}/groups`,
             [handleGroupCreated]
         );
+        subscribeToEvent(
+            'child_removed',
+            `/users/${auth.currentUser.uid}/groups`,
+            [handleGroupDeleted]
+        );
         return () => {
             unsubscribeFromEvents(
                 'child_added',
+                `/users/${auth.currentUser.uid}/groups`
+            );
+            unsubscribeFromEvents(
+                'child_removed',
                 `/users/${auth.currentUser.uid}/groups`
             );
         };
