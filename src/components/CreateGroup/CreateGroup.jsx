@@ -21,6 +21,13 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
     },
     button: {
+        borderRadius: '20px',
+        paddingRight: theme.spacing(4),
+        paddingLeft: theme.spacing(4),
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
+    margin: {
         margin: theme.spacing(2),
     },
 }));
@@ -121,7 +128,7 @@ function SimpleDialog(props) {
             <Box className={classes.buttons}>
                 <Button
                     color="secondary"
-                    className={classes.button}
+                    className={`${classes.button} ${classes.margin}`}
                     onClick={() => handleExitClick()}
                 >
                     Cancel
@@ -129,7 +136,7 @@ function SimpleDialog(props) {
                 <Button
                     variant="contained"
                     color="primary"
-                    className={classes.button}
+                    className={`${classes.button} ${classes.margin}`}
                     onClick={() =>
                         handleExitClick({ users: users, groupName: groupName })
                     }
@@ -148,6 +155,7 @@ SimpleDialog.propTypes = {
 };
 
 function CreateGroup(props) {
+    const classes = useStyles();
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -168,6 +176,7 @@ function CreateGroup(props) {
                 variant="contained"
                 color="primary"
                 onClick={handleClickOpen}
+                className={classes.button}
             >
                 Create Group
             </Button>

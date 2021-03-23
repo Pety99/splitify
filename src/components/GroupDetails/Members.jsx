@@ -16,9 +16,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'stretch',
+        alignContent: 'center',
         marginLeft: theme.spacing(1),
     },
     large: {
+        alignSelf: 'center',
         width: theme.spacing(6),
         height: theme.spacing(6),
     },
@@ -52,7 +54,7 @@ function Members({ currentGroup, groupDeleted }) {
 
     return (
         <Box display="flex">
-            <Typography variant="h5" component="p" className={classes.title}>
+            <Typography variant="h4" component="p" className={classes.title}>
                 {currentGroup.value.name}
             </Typography>
             <Avatars
@@ -67,7 +69,10 @@ function Members({ currentGroup, groupDeleted }) {
             >
                 <Delete className={classes.medium} />
                 <AlertDialog
-                    content={'Are you sure you want to delete this group?'}
+                    title={'Do you want to delete this group?'}
+                    content={
+                        'Warning! This will remove everything, including the receipts!'
+                    }
                     ok={'Yes'}
                     cancel={'No'}
                     open={alertOpen}

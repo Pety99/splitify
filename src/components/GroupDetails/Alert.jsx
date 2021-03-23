@@ -19,14 +19,21 @@ function AlertDialog(props) {
 
     return (
         <Dialog
+            PaperProps={{
+                style: {
+                    background: 'rgba( 255, 255, 255, 0.85 )',
+                    WeboxShadow: '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
+                    backdropFilter: 'blur( 4px )',
+                    borderRadius: '15px',
+                    border: '1px solid rgba( 255, 255, 255, 0.18 )',
+                },
+            }}
             open={props.open}
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">
-                {"Use Google's location service?"}
-            </DialogTitle>
+            <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     {props.content}
@@ -45,6 +52,7 @@ function AlertDialog(props) {
 }
 
 AlertDialog.propTypes = {
+    title: PropTypes.string,
     content: PropTypes.string,
     cancel: PropTypes.string,
     ok: PropTypes.string,

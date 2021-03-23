@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             display: 'none',
         },
+        borderRadius: '15px',
     },
 
     title: {

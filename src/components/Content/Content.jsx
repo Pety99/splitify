@@ -1,11 +1,12 @@
-import { Chip, Grid, Hidden, makeStyles, Paper } from '@material-ui/core';
+import { Grid, Hidden, makeStyles, Paper } from '@material-ui/core';
 import { Fragment, useState } from 'react';
 import LeftPanel from '../Panels/LeftPanel';
 import RightPanel from '../Panels/RightPanel';
 import RightPanelForMobile from '../Panels/RightPanelForMobile';
 
 import PropTypes from 'prop-types';
-import Members from '../Members/Members';
+import Members from '../GroupDetails/Members';
+import Chips from '../GroupDetails/Chips';
 
 const useStyles = makeStyles((theme) => {
     const glass = {
@@ -62,14 +63,11 @@ function Receipts({ currentGroup, groupDeleted }) {
 
     return currentGroup ? (
         <div className={classes.root}>
-            <div>
-                <Chip label="Items" clickable />
-                <Chip label="Analytics" clickable color="primary" />
-            </div>
             <Members
                 currentGroup={currentGroup}
                 groupDeleted={groupDeleted}
             ></Members>
+            <Chips data={[{ name: 'Items' }, { name: 'Analytics' }]} />
             <Grid container spacing={3} className={classes.container}>
                 <Grid item xs md={6} lg={4}>
                     <Fragment>{leftSide}</Fragment>
