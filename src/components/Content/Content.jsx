@@ -7,7 +7,8 @@ import RightPanelForMobile from '../Panels/RightPanelForMobile';
 import PropTypes from 'prop-types';
 import Members from '../GroupDetails/Members';
 import Chips from '../GroupDetails/Chips';
-import NoGroupsPlaceholder from '../Placeholders/NoGroups';
+import Placeholder from '../Placeholders/Placeholer';
+import placeholderImge from '../Placeholders/image.svg';
 import useWindowDimensions from '../../hooks/useWindowDimension';
 
 const useStyles = makeStyles((theme) => {
@@ -87,7 +88,13 @@ function Receipts({ currentGroup, groupDeleted }) {
             </Grid>
         </div>
     ) : (
-        <NoGroupsPlaceholder />
+        <Fragment>
+            <Placeholder
+                primaryText={'Currently no group is open.'}
+                secondaryText={'Create or open one to see your receipts!'}
+                image={placeholderImge}
+            />
+        </Fragment>
     );
 }
 

@@ -11,7 +11,7 @@ function RightPanel(props) {
             <p>{props.receiptData.name}</p>
             <ItemsList
                 items={Array.from(
-                    Object.keys(props?.receiptData?.value?.items)
+                    Object.keys(props?.receiptData?.value?.items || {})
                 )}
             />
             <Item />
