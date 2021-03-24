@@ -22,8 +22,9 @@ function ReceiptsList(props) {
         ]);
         return () => {
             unsubscribeFromEvents('child_added', `/receipts/${props.groupId}`);
+            setReceipts([]);
         };
-    }, []);
+    }, [props.groupId]);
 
     const handleReceiptCreated = (receiptSnap) => {
         props.removeSkeleton();
@@ -35,13 +36,12 @@ function ReceiptsList(props) {
 
     return (
         <Fragment>
-            <p>Receipts</p>
             {loadSkeletons()}
             {receipts.map((receipt) => (
                 <ReceiptItem
                     key={receipt.key}
                     data={receipt.value}
-                    onClickHandler={props.toggleLeftPanel}
+                    onClickHandler={() => props.toggleLeftPanel(receipt)}
                 />
             ))}
         </Fragment>

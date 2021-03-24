@@ -52,6 +52,7 @@ function Receipts({ currentGroup, groupDeleted }) {
         if (width < 960) {
             setRightShownOnLeft(!rightShowOnLeft);
         }
+        console.log(receiptData);
         setCurrentReceipt(receiptData);
     };
 
