@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Members from '../GroupDetails/Members';
 import Chips from '../GroupDetails/Chips';
 import NoGroupsPlaceholder from '../Placeholders/NoGroups';
+import useWindowDimensions from '../../hooks/useWindowDimension';
 
 const useStyles = makeStyles((theme) => {
     const glass = {
@@ -44,12 +45,13 @@ const useStyles = makeStyles((theme) => {
 
 function Receipts({ currentGroup, groupDeleted }) {
     const classes = useStyles();
-
     const [currentReceipt, setCurrentReceipt] = useState({});
-
     const [rightShowOnLeft, setRightShownOnLeft] = useState(false);
+    const { width } = useWindowDimensions();
     const toggleLeftSide = (receiptData) => {
-        setRightShownOnLeft(!rightShowOnLeft);
+        if (width < 960) {
+            setRightShownOnLeft(!rightShowOnLeft);
+        }
         setCurrentReceipt(receiptData);
     };
 

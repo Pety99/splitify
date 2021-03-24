@@ -66,6 +66,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 function LeftPanel(props) {
+    console.log('left panel changed');
     const classes = useStyles();
     const [skeletons, setSkeletons] = useState(0);
 
