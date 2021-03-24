@@ -16,7 +16,10 @@ function RightPanelForMobile(props) {
     return (
         <Fragment>
             <Hidden smDown>
-                <LeftPanel toggleLeftSide={props.backButtonClickHandler} />
+                <LeftPanel
+                    toggleLeftSide={props.backButtonClickHandler}
+                    groupId={props.currentGroup.key}
+                />
             </Hidden>
             <Hidden mdUp>
                 <Button
@@ -34,6 +37,7 @@ function RightPanelForMobile(props) {
 RightPanelForMobile.propTypes = {
     backButtonClickHandler: PropTypes.func,
     receiptData: PropTypes.object,
+    currentGroup: PropTypes.object,
 };
 
 export default RightPanelForMobile;

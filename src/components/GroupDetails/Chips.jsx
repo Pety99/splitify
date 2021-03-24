@@ -49,6 +49,6 @@ function Chips(props) {
 }
 
 Chips.propTypes = {
-    data: PropTypes.object,
+    data: PropTypes.array,
 };
 export default Chips;

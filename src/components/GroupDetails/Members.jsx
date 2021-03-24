@@ -1,10 +1,8 @@
-import { Box, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Box, makeStyles, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { deleteGroup, getUserById } from '../../database';
-import { Delete } from '@material-ui/icons';
-import AlertDialog from './Alert';
+import { getUserById } from '../../database';
 import Avatars from './Avatars';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,11 +32,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Members({ currentGroup, groupDeleted }) {
+function Members({ currentGroup }) {
     const classes = useStyles();
 
     const [members, setMembers] = useState([]);
-    const [alertOpen, setAlertOpen] = useState(false);
 
     useEffect(async () => {
         for (const id of Object.keys(currentGroup.value.members)) {
@@ -47,45 +44,22 @@ function Members({ currentGroup, groupDeleted }) {
         }
     }, []);
 
-    const deleteThisGroup = function () {
-        deleteGroup(currentGroup.key, Object.keys(currentGroup.value.members));
-        groupDeleted();
-    };
-
     return (
-        <Box display="flex">
-            <Typography variant="h4" component="p" className={classes.title}>
-                {currentGroup.value.name}
+        <Box display="flex" flexWrap={'wrap'}>
+            <Typography variant="h5" component="p" className={classes.title}>
+                Members
             </Typography>
             <Avatars
                 members={members}
                 containerClass={classes.container}
                 largeClass={classes.large}
             />
-            <IconButton
-                className={`${classes.large} ${classes.end}`}
-                aria-label="delete"
-                onClick={() => setAlertOpen(!alertOpen)}
-            >
-                <Delete className={classes.medium} />
-                <AlertDialog
-                    title={'Do you want to delete this group?'}
-                    content={
-                        'Warning! This will remove everything, including the receipts!'
-                    }
-                    ok={'Yes'}
-                    cancel={'No'}
-                    open={alertOpen}
-                    okClickHandler={deleteThisGroup}
-                />
-            </IconButton>
         </Box>
     );
 }
 
 Members.propTypes = {
     currentGroup: PropTypes.object,
-    groupDeleted: PropTypes.func,
 };
 
 export default Members;

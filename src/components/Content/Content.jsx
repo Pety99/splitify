@@ -7,6 +7,7 @@ import RightPanelForMobile from '../Panels/RightPanelForMobile';
 import PropTypes from 'prop-types';
 import Members from '../GroupDetails/Members';
 import Chips from '../GroupDetails/Chips';
+import NoGroupsPlaceholder from '../Placeholders/NoGroups';
 
 const useStyles = makeStyles((theme) => {
     const glass = {
@@ -56,18 +57,19 @@ function Receipts({ currentGroup, groupDeleted }) {
         <RightPanelForMobile
             backButtonClickHandler={toggleLeftSide}
             receiptData={currentReceipt}
+            currentGroup={currentGroup}
         />
     ) : (
-        <LeftPanel toggleLeftSide={toggleLeftSide} />
+        <LeftPanel toggleLeftSide={toggleLeftSide} groupId={currentGroup.key} />
     );
 
     return currentGroup ? (
         <div className={classes.root}>
+            <Chips data={[{ name: 'Items' }, { name: 'Analytics' }]} />
             <Members
                 currentGroup={currentGroup}
                 groupDeleted={groupDeleted}
             ></Members>
-            <Chips data={[{ name: 'Items' }, { name: 'Analytics' }]} />
             <Grid container spacing={3} className={classes.container}>
                 <Grid item xs md={6} lg={4}>
                     <Fragment>{leftSide}</Fragment>
@@ -82,7 +84,7 @@ function Receipts({ currentGroup, groupDeleted }) {
             </Grid>
         </div>
     ) : (
-        <div>placeholder</div>
+        <NoGroupsPlaceholder />
     );
 }
 

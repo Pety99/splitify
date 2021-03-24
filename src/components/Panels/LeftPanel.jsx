@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import ReceiptsList from '../Content/ReceiptsList';
 
 import PropTypes from 'prop-types';
@@ -67,12 +67,21 @@ const useStyles = makeStyles((theme) => {
 
 function LeftPanel(props) {
     const classes = useStyles();
+    const [skeletons, setSkeletons] = useState(0);
+
+    const addSkeleton = () => {
+        setSkeletons(skeletons + 1);
+    };
+
+    const removeSkeleton = () => {
+        setSkeletons(skeletons - 1 >= 0 ? skeletons - 1 : 0);
+    };
     return (
         <Fragment>
             <Paper
                 className={`${classes.paper} ${classes.small} ${classes.glass}`}
             >
-                <Uploader />
+                <Uploader groupId={props.groupId} addSkeleton={addSkeleton} />
             </Paper>
             <Paper
                 className={`${classes.paper} ${classes.large} ${classes.glass}`}
@@ -81,7 +90,12 @@ function LeftPanel(props) {
                     {' '}
                     Reciepts
                 </Typography>
-                <ReceiptsList toggleLeftPanel={props.toggleLeftSide} />
+                <ReceiptsList
+                    toggleLeftPanel={props.toggleLeftSide}
+                    groupId={props.groupId}
+                    skeletons={skeletons}
+                    removeSkeleton={removeSkeleton}
+                />
             </Paper>
         </Fragment>
     );
@@ -89,5 +103,6 @@ function LeftPanel(props) {
 
 LeftPanel.propTypes = {
     toggleLeftSide: PropTypes.func,
+    groupId: PropTypes.string,
 };
 export default LeftPanel;

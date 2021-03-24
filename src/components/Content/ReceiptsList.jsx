@@ -1,43 +1,57 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import ReceiptItem from './ReceiptItem';
+import { subscribeToEvent, unsubscribeFromEvents } from '../../database';
+import ReceiptItemSkeleton from '../Skeletons/ReceiptSkeleton';
 
 function ReceiptsList(props) {
-    const [receipts] = useState([
-        {
-            name: 'Walmart 1',
-            date: '2017-07-28',
-            logo: 'https://cdn.veryfi.com/logos/us/218078496.jpeg',
-            total: 82.637264234,
-        },
-        {
-            name: 'Walmart 2',
-            date: '2017-07-288',
-            logo: 'https://cdn.veryfi.com/logos/us/218078496.jpeg',
-            total: 82.63,
-        },
-    ]);
+    const [receipts, setReceipts] = useState([]);
+
+    const loadSkeletons = () => {
+        const result = [];
+        for (let i = 0; i < props.skeletons; i++) {
+            result.push(<ReceiptItemSkeleton key={i} />);
+        }
+        return result;
+    };
+
+    useEffect(() => {
+        subscribeToEvent('child_added', `/receipts/${props.groupId}`, [
+            handleReceiptCreated,
+        ]);
+        return () => {
+            unsubscribeFromEvents('child_added', `/receipts/${props.groupId}`);
+        };
+    }, []);
+
+    const handleReceiptCreated = (receiptSnap) => {
+        props.removeSkeleton();
+        setReceipts((perviousReceipts) => [
+            { key: receiptSnap.key, value: receiptSnap.val() },
+            ...perviousReceipts,
+        ]);
+    };
+
     return (
         <Fragment>
             <p>Receipts</p>
-            <ReceiptItem
-                data={receipts[0]}
-                onClickHandler={props.toggleLeftPanel}
-            />
-            <ReceiptItem
-                data={receipts[1]}
-                onClickHandler={props.toggleLeftPanel}
-            />
-            <ReceiptItem
-                data={receipts[1]}
-                onClickHandler={props.toggleLeftPanel}
-            />
+            {loadSkeletons()}
+            {receipts.map((receipt) => (
+                <ReceiptItem
+                    key={receipt.key}
+                    data={receipt.value}
+                    onClickHandler={props.toggleLeftPanel}
+                />
+            ))}
         </Fragment>
     );
 }
 
 ReceiptsList.propTypes = {
     toggleLeftPanel: PropTypes.func,
+    groupId: PropTypes.string,
+    skeletons: PropTypes.number,
+    removeSkeleton: PropTypes.func,
 };
 export default ReceiptsList;

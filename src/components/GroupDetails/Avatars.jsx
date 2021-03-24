@@ -20,8 +20,8 @@ function Avatars(props) {
 }
 
 Avatars.propTypes = {
-    containerClass: PropTypes.object,
-    largeClass: PropTypes.object,
-    members: PropTypes.object,
+    containerClass: PropTypes.string,
+    largeClass: PropTypes.string,
+    members: PropTypes.array,
 };
 export default Avatars;

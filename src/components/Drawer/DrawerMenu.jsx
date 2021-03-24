@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -17,8 +16,10 @@ import CreateGroup from '../../components/CreateGroup/CreateGroup';
 
 import { auth } from '../../firebase';
 import { Box, Button } from '@material-ui/core';
-import { ExitToApp } from '@material-ui/icons';
+import { Delete, ExitToApp } from '@material-ui/icons';
 import Content from '../Content/Content';
+import AlertDialog from '../GroupDetails/Alert';
+import { deleteGroup } from '../../database';
 
 const drawerWidth = 240;
 
@@ -44,15 +45,14 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             display: 'none',
         },
-        borderRadius: '15px',
     },
 
     title: {
         flexGrow: 1,
+        fontWeight: 200,
     },
-    profilePicture: {
-        width: '36px',
-        height: '36px',
+    icon: {
+        color: 'white',
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
@@ -73,6 +73,7 @@ function ResponsiveDrawer() {
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [selectedGroup, setSelecetedGroup] = useState('');
+    const [alertOpen, setAlertOpen] = useState(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -103,6 +104,14 @@ function ResponsiveDrawer() {
     const container =
         window !== undefined ? () => window.document.body : undefined;
 
+    const deleteThisGroup = function () {
+        deleteGroup(
+            selectedGroup.key,
+            Object.keys(selectedGroup.value.members)
+        );
+        setSelecetedGroup('');
+    };
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -117,18 +126,26 @@ function ResponsiveDrawer() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography
-                        variant="h6"
-                        className={classes.title}
-                    ></Typography>
-                    {auth.currentUser && (
-                        <Avatar
-                            className={classes.profilePicture}
-                            aria-label="account of current user"
-                            color="inherit"
-                            src={auth.currentUser.photoURL}
-                        ></Avatar>
-                    )}
+                    <Typography variant="h6" className={classes.title}>
+                        {selectedGroup?.value?.name || ''}
+                    </Typography>
+                    <IconButton
+                        className={classes.icon}
+                        aria-label="delete"
+                        onClick={() => setAlertOpen(!alertOpen)}
+                    >
+                        <Delete className={classes.medium} />
+                        <AlertDialog
+                            title={'Do you want to delete this group?'}
+                            content={
+                                'Warning! This will remove everything, including the receipts!'
+                            }
+                            ok={'Yes'}
+                            cancel={'No'}
+                            open={alertOpen}
+                            okClickHandler={deleteThisGroup}
+                        />
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="mailbox folders">
@@ -164,10 +181,7 @@ function ResponsiveDrawer() {
             </nav>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <Content
-                    currentGroup={selectedGroup}
-                    groupDeleted={() => setSelecetedGroup('')}
-                />
+                <Content currentGroup={selectedGroup} />
             </main>
         </div>
     );

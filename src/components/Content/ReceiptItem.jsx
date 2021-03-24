@@ -10,6 +10,7 @@ import {
 
 import PropTypes from 'prop-types';
 import getSymbolFromCurrency from 'currency-symbol-map';
+import { Store } from '@material-ui/icons';
 
 const glass = {
     background: `rgba(255, 255, 255, 0.25 )`,
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
     middlePart: {
         flexDirection: 'column',
+        flexWrap: 'nowrap',
         alignContent: 'flex-start',
         justifyContent: 'space-around',
         height: '100%',
@@ -54,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
         '& p': {
             fontWeight: 100,
             marginBottom: theme.spacing(1),
+            maxHeight: 45,
         },
     },
     rightPart: {
@@ -74,7 +77,6 @@ const useStyles = makeStyles((theme) => ({
 function ReceiptItem(props) {
     const { data, onClickHandler } = props;
     const classes = useStyles();
-
     return (
         <Card className={`${classes.root} ${classes.glass}`}>
             <CardActionArea
@@ -94,7 +96,9 @@ function ReceiptItem(props) {
                                 alt="Store logo"
                                 src={data.logo}
                                 className={classes.avatar}
-                            />
+                            >
+                                {data.logo || <Store />}
+                            </Avatar>
                         </Grid>
                         <Grid
                             container
@@ -111,14 +115,15 @@ function ReceiptItem(props) {
                                 component="h1"
                                 noWrap
                             >
-                                {data.name}
+                                {data.name || 'Unknown Store'}
                             </Typography>
                             <Typography
                                 variant="body2"
                                 color="textSecondary"
                                 component="p"
                             >
-                                {data.date}
+                                {data.date.split(' ')[0] ||
+                                    'Unknown purchase date'}
                             </Typography>
                         </Grid>
                         <Grid
@@ -132,8 +137,9 @@ function ReceiptItem(props) {
                                 component="p"
                                 noWrap
                             >
-                                {data.total}
-                                {' ' + getSymbolFromCurrency('HUF')}
+                                {data.total.toFixed(2) || 0}
+                                {' ' + getSymbolFromCurrency(data.currency) ||
+                                    '?'}
                             </Typography>
                         </Grid>
                     </Grid>
