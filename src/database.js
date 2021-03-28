@@ -130,24 +130,6 @@ export const createGroup = function (currentUser, data) {
     db.ref().update(updates);
 };
 
-/*
-// Update Group after confirming the members and the name
-export const updateGroup = function (groupKey, data) {
-    const updates = {};
-
-    for (const user of data.users) {
-        updates[`users/${user.key}/groups/${groupKey}`] = true;
-    }
-
-    updates[`groups/${groupKey}/name`] = data.groupName;
-    for (const user of data.users) {
-        console.log(user.key);
-        updates[`groups/${groupKey}/members/${user.key}`] = true;
-    }
-    db.ref().update(updates);
-}
-*/
-
 export const findGroupById = async function (id) {
     const snap = await db.ref().child(`groups/${id}`).once('value');
 
@@ -169,5 +151,29 @@ export const deleteGroup = function (groupKey, membersKeys) {
     }
     updates[`items/${groupKey}`] = null;
     updates[`receipts/${groupKey}`] = null;
+    db.ref().update(updates);
+};
+
+export const findItemById = async function (id, groupId) {
+    const snap = await db.ref().child(`items/${groupId}/${id}`).once('value');
+
+    // Restructure the data
+    const ret = {
+        key: id,
+        value: snap.val(),
+    };
+    return ret;
+};
+
+export const updateReceiptTotal = function (groupKey, receiptKey, total) {
+    const updates = {};
+    updates[`receipts/${groupKey}/${receiptKey}/total`] = total;
+    db.ref().update(updates);
+};
+
+export const updateItem = function (groupKey, itemKey, data) {
+    const updates = {};
+    updates[`items/${groupKey}/${itemKey}`] = data;
+
     db.ref().update(updates);
 };

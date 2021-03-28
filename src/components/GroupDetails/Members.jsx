@@ -1,5 +1,5 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 import { getUserById } from '../../database';
@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     title: {
         margin: theme.spacing(1),
         alignSelf: 'center',
+        fontWeight: 500,
     },
     container: {
         display: 'flex',
@@ -32,10 +33,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Members({ currentGroup }) {
+function Members({ currentGroup, members, setMembers }) {
     const classes = useStyles();
-
-    const [members, setMembers] = useState([]);
 
     useEffect(async () => {
         for (const id of Object.keys(currentGroup.value.members)) {
@@ -60,6 +59,8 @@ function Members({ currentGroup }) {
 
 Members.propTypes = {
     currentGroup: PropTypes.object,
+    members: PropTypes.array,
+    setMembers: PropTypes.func,
 };
 
 export default Members;

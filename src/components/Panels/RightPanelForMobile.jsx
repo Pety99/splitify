@@ -28,7 +28,11 @@ function RightPanelForMobile(props) {
                 >
                     Back
                 </Button>
-                <RightPanel receiptData={props.receiptData} />
+                <RightPanel
+                    receiptData={props.receiptData}
+                    currentGroup={props.currentGroup}
+                    groupMembers={props.members}
+                />
             </Hidden>
         </Fragment>
     );
@@ -38,6 +42,7 @@ RightPanelForMobile.propTypes = {
     backButtonClickHandler: PropTypes.func,
     receiptData: PropTypes.object,
     currentGroup: PropTypes.object,
+    members: PropTypes.array,
 };
 
 export default RightPanelForMobile;

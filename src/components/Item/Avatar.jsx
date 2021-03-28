@@ -37,7 +37,7 @@ function Avatars(props) {
                 <Avatar
                     className={classes.avatar}
                     alt="Remy Sharp"
-                    //src={member.profile_picture}
+                    src={props.profilePricture}
                     sizes="small"
                 />
             </Tooltip>
@@ -47,6 +47,7 @@ function Avatars(props) {
 
 Avatars.propTypes = {
     name: PropTypes.string,
+    profilePricture: PropTypes.string,
 };
 
 export default Avatars;

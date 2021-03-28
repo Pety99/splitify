@@ -38,7 +38,8 @@ const useStyles = makeStyles((theme) => {
         },
         glass: glass,
         large: {
-            height: `calc(100% - ${dropzoneHeight} - 8px)`,
+            //height: `calc(100% - ${dropzoneHeight} - 8px)`,
+            height: 'auto',
         },
         small: {
             height: `${dropzoneHeight}`,
@@ -61,6 +62,9 @@ const useStyles = makeStyles((theme) => {
                     margin: theme.spacing(1),
                 },
             },
+        },
+        title: {
+            fontWeight: 500,
         },
     };
 });
@@ -86,7 +90,14 @@ function LeftPanel(props) {
             <Paper
                 className={`${classes.paper} ${classes.large} ${classes.glass}`}
             >
-                <Typography variant="h5" component="p" gutterBottom>
+                <Typography
+                    variant="h5"
+                    component="p"
+                    gutterBottom
+                    align="left"
+                    color="textPrimary"
+                    className={classes.title}
+                >
                     {' '}
                     Reciepts
                 </Typography>

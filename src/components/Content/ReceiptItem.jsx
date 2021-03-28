@@ -14,7 +14,7 @@ import { Store } from '@material-ui/icons';
 
 const glass = {
     background: `rgba(255, 255, 255, 0.25 )`,
-    backdropFilter: 'blur( 4px )',
+    //backdropFilter: 'blur( 4px )',
     border: '1px solid rgba( 255, 255, 255, 0.18 )',
     borderRadius: '10px',
 };
@@ -22,7 +22,8 @@ const glass = {
 const useStyles = makeStyles((theme) => ({
     root: {
         height: 120,
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(0.7),
+        marginBottom: theme.spacing(0.7),
     },
     glass: glass,
     container: {
@@ -77,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
 function ReceiptItem(props) {
     const { data, onClickHandler } = props;
     const classes = useStyles();
+
     return (
         <Card className={`${classes.root} ${classes.glass}`}>
             <CardActionArea

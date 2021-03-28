@@ -1,5 +1,5 @@
 import { Grid, Hidden, makeStyles, Paper } from '@material-ui/core';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import LeftPanel from '../Panels/LeftPanel';
 import RightPanel from '../Panels/RightPanel';
 import RightPanelForMobile from '../Panels/RightPanelForMobile';
@@ -10,6 +10,7 @@ import Chips from '../GroupDetails/Chips';
 import Placeholder from '../Placeholders/Placeholer';
 import placeholderImge from '../Placeholders/image.svg';
 import useWindowDimensions from '../../hooks/useWindowDimension';
+import { subscribeToEvent, unsubscribeFromEvents } from '../../database';
 
 const useStyles = makeStyles((theme) => {
     const glass = {
@@ -28,7 +29,6 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'stretch',
-            height: 'calc(100vh - 120px)',
         },
         paper: {
             display: 'flex',
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => {
             color: theme.palette.text.secondary,
             flex: '1 0 auto',
             margin: theme.spacing(1),
-            height: '100%',
+            height: 'auto',
         },
         glass: glass,
     };
@@ -48,20 +48,43 @@ function Receipts({ currentGroup, groupDeleted }) {
     const classes = useStyles();
     const [currentReceipt, setCurrentReceipt] = useState({});
     const [rightShowOnLeft, setRightShownOnLeft] = useState(false);
+    const [members, setMembers] = useState([]);
     const { width } = useWindowDimensions();
     const toggleLeftSide = (receiptData) => {
         if (width < 960) {
             setRightShownOnLeft(!rightShowOnLeft);
         }
-        console.log(receiptData);
         setCurrentReceipt(receiptData);
     };
+
+    const handleReceiptChanged = (snap) => {
+        const newValue = {
+            ...currentReceipt.value,
+            total: snap.val(),
+        };
+        setCurrentReceipt((prev) => ({ key: prev.key, value: newValue }));
+    };
+
+    useEffect(() => {
+        subscribeToEvent(
+            'child_changed',
+            `/receipts/${currentGroup.key}/${currentReceipt.key}`,
+            [handleReceiptChanged]
+        );
+        return () => {
+            unsubscribeFromEvents(
+                'child_changed',
+                `/receipts/${currentGroup.key}/${currentReceipt.key}`
+            );
+        };
+    });
 
     const leftSide = rightShowOnLeft ? (
         <RightPanelForMobile
             backButtonClickHandler={toggleLeftSide}
             receiptData={currentReceipt}
             currentGroup={currentGroup}
+            members={members}
         />
     ) : (
         <LeftPanel toggleLeftSide={toggleLeftSide} groupId={currentGroup.key} />
@@ -73,6 +96,8 @@ function Receipts({ currentGroup, groupDeleted }) {
             <Members
                 currentGroup={currentGroup}
                 groupDeleted={groupDeleted}
+                members={members}
+                setMembers={setMembers}
             ></Members>
             <Grid container spacing={3} className={classes.container}>
                 <Grid item xs md={6} lg={4}>
@@ -81,7 +106,11 @@ function Receipts({ currentGroup, groupDeleted }) {
                 <Hidden smDown>
                     <Grid item xs>
                         <Paper className={`${classes.paper} ${classes.glass}`}>
-                            <RightPanel receiptData={currentReceipt} />
+                            <RightPanel
+                                receiptData={currentReceipt}
+                                currentGroup={currentGroup}
+                                groupMembers={members}
+                            />
                         </Paper>
                     </Grid>
                 </Hidden>

@@ -30,7 +30,12 @@ function Avatars(props) {
     return (
         <div className={classes.root}>
             {props.members.map((m) => (
-                <Avatar name={m} key={m} className={classes.avatar}></Avatar>
+                <Avatar
+                    name={m.username}
+                    profilePricture={m.profile_picture}
+                    key={m.email}
+                    className={classes.avatar}
+                ></Avatar>
             ))}
         </div>
     );

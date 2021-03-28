@@ -1,27 +1,44 @@
+import PropTypes from 'prop-types';
+import ItemsList from '../Content/ItemsList';
+import ItemsDetails from '../Content/ItemsDetails';
+import { makeStyles, Typography } from '@material-ui/core';
 import { Fragment } from 'react';
 
-import PropTypes from 'prop-types';
-import Item from '../Item/Item';
-import ItemsList from '../Content/ItemsList';
+const useStyles = makeStyles(() => ({
+    title: {
+        fontWeight: 500,
+    },
+}));
 
-function RightPanel(props) {
+function RightPanel({ receiptData, currentGroup, groupMembers }) {
+    const classes = useStyles();
+
     return (
         <Fragment>
-            RightPanel
-            <p>{props.receiptData.name}</p>
+            <Typography
+                variant="h5"
+                component="p"
+                gutterBottom
+                align="left"
+                color="textPrimary"
+                className={classes.title}
+            >
+                Items
+            </Typography>
+            <ItemsDetails data={receiptData?.value} />
             <ItemsList
-                items={Array.from(
-                    Object.keys(props?.receiptData?.value?.items || {})
-                )}
+                items={Array.from(Object.keys(receiptData?.value?.items || {}))}
+                groupId={currentGroup.key}
+                groupMembers={groupMembers}
+                currency={receiptData?.value?.currency}
+                receiptData={receiptData}
             />
-            <Item />
-            <Item />
-            <Item />
-            <Item />
         </Fragment>
     );
 }
 RightPanel.propTypes = {
     receiptData: PropTypes.object,
+    currentGroup: PropTypes.object,
+    groupMembers: PropTypes.array,
 };
 export default RightPanel;
