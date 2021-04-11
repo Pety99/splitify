@@ -24,8 +24,8 @@ export const uploadFile = function (user, currentGroupID, file) {
 export function subscribeToEvent(type, path, callbacks) {
     const ref = db.ref(path);
     ref.on(type, (snapshot) => {
-        callbacks.forEach((callback) => {
-            callback(snapshot);
+        callbacks.forEach(async (callback) => {
+            await callback(snapshot);
         });
     });
 }
@@ -43,9 +43,9 @@ export const unsubscribeFromEvents = function (type, path) {
 export const createUser = function (user) {
     // Check if the user already exists
     db.ref('users/' + user.uid).once('value', (snap) => {
-        const user = snap.val();
+        const userSnap = snap.val();
 
-        if (!user) {
+        if (!userSnap) {
             const updates = {};
             updates['users/' + user.uid] = {
                 username: user.displayName,
@@ -117,14 +117,12 @@ const insertGroupData = function (updates, groupKey, data) {
         console.log(user.key);
         updates[`groups/${groupKey}/members/${user.key}`] = true;
     }
-    console.log(updates);
 
     return updates;
 };
 
 export const createGroup = function (currentUser, data) {
     let { newGroupKey, updates } = crearteGroupKey(currentUser);
-    console.log(updates);
     updates = insertGroupData(updates, newGroupKey, data);
 
     db.ref().update(updates);
@@ -163,6 +161,14 @@ export const findItemById = async function (id, groupId) {
         value: snap.val(),
     };
     return ret;
+};
+
+export const deleteItem = async function (groupKey, receiptKey, itemKey) {
+    const updates = {};
+    updates[`items/${groupKey}/${itemKey}`] = null;
+    updates[`receipts/${groupKey}/${receiptKey}/items/${itemKey}`] = null;
+
+    db.ref().update(updates);
 };
 
 export const updateReceiptTotal = function (groupKey, receiptKey, total) {

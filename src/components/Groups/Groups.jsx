@@ -35,6 +35,7 @@ function groups({ setGroup }) {
 
     const [groups, setGroups] = useState([]);
     const [open, setOpen] = useState(true);
+    const [currentUser] = useState(auth.currentUser);
 
     const handleClick = () => {
         setOpen(!open);
@@ -56,22 +57,22 @@ function groups({ setGroup }) {
     useEffect(() => {
         subscribeToEvent(
             'child_added',
-            `/users/${auth.currentUser.uid}/groups`,
+            `/users/${currentUser.uid}/groups`,
             [handleGroupCreated]
         );
         subscribeToEvent(
             'child_removed',
-            `/users/${auth.currentUser.uid}/groups`,
+            `/users/${currentUser.uid}/groups`,
             [handleGroupDeleted]
         );
         return () => {
             unsubscribeFromEvents(
                 'child_added',
-                `/users/${auth.currentUser.uid}/groups`
+                `/users/${currentUser.uid}/groups`
             );
             unsubscribeFromEvents(
                 'child_removed',
-                `/users/${auth.currentUser.uid}/groups`
+                `/users/${currentUser.uid}/groups`
             );
         };
     }, []);

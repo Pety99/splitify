@@ -14,7 +14,7 @@ import Actions from './Actions';
 import Avatars from './Avatars';
 import Text from './Text';
 import PropTypes from 'prop-types';
-import { findItemById, updateItem } from '../../database';
+import { deleteItem, findItemById, updateItem } from '../../database';
 import getSymbolFromCurrency from 'currency-symbol-map';
 
 const useStyles = makeStyles((theme) => ({
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Item({ id, groupId, members, currency, updateTotal }) {
+function Item({ id, groupId, receiptId, members, currency, updateTotal }) {
     const classes = useStyles();
     const [editMode, setEditMode] = useState(false);
     const [data, setData] = useState({});
@@ -94,7 +94,7 @@ function Item({ id, groupId, members, currency, updateTotal }) {
         setBackupData(item.value);
     }, []);
 
-    const cancelEdit = (e) => {
+    const toggleEdit = (e) => {
         e.stopPropagation();
         setEditMode(!editMode);
         setData(backupData);
@@ -114,6 +114,11 @@ function Item({ id, groupId, members, currency, updateTotal }) {
         setBackupData(data);
     };
 
+    const handleDeleteItem = () => {
+        updateTotal(0.0 - backupData.price);
+        deleteItem(groupId, receiptId, id);
+    };
+
     const handleTitleChange = (text) => {
         const newData = {
             ...data,
@@ -131,6 +136,16 @@ function Item({ id, groupId, members, currency, updateTotal }) {
             };
             setData(newData);
         }
+    };
+
+    const handlePayersChanged = (payers) => {
+        const newData = {
+            ...data,
+            payerIDs: payers,
+        };
+        setData(newData);
+
+        updateItem(groupId, id, newData);
     };
 
     return (
@@ -183,7 +198,11 @@ function Item({ id, groupId, members, currency, updateTotal }) {
                 </AccordionSummary>
                 <AccordionDetails className={classes.details}>
                     <div className={`${classes.column}, ${classes.wide}`}>
-                        <Avatars members={members} />
+                        <Avatars
+                            members={members}
+                            payers={data.payerIDs}
+                            handlePayersChanged={handlePayersChanged}
+                        />
                     </div>
                     <div className={clsx(classes.column, classes.helper)}>
                         <Typography variant="caption">
@@ -204,7 +223,8 @@ function Item({ id, groupId, members, currency, updateTotal }) {
                         editMode={editMode}
                         save={save}
                         cancel={cancel}
-                        cancelEdit={cancelEdit}
+                        toggleEdit={toggleEdit}
+                        delete={handleDeleteItem}
                         editClass={classes.edit}
                     />
                 </AccordionActions>
@@ -216,6 +236,7 @@ function Item({ id, groupId, members, currency, updateTotal }) {
 Item.propTypes = {
     id: PropTypes.string,
     groupId: PropTypes.string,
+    receiptId: PropTypes.string,
     members: PropTypes.array,
     currency: PropTypes.string,
     updateTotal: PropTypes.func,

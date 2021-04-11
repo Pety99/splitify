@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        marginTop: 'min(20%, 150px )',
+        //marginTop: 'min(20%, 150px )',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -17,6 +17,12 @@ const useStyles = makeStyles((theme) => ({
     text: {
         margin: theme.spacing(1),
     },
+    title: {
+        fontSize: theme.spacing(4),
+    },
+    subtitle: {
+        fontSize: theme.spacing(2),
+    },
 }));
 
 function Placeholder(props) {
@@ -28,14 +34,14 @@ function Placeholder(props) {
             <Typography
                 variant="h3"
                 color="textPrimary"
-                className={classes.text}
+                className={`${classes.text} ${classes.title}`}
             >
                 {props.primaryText}
             </Typography>
             <Typography
                 variant="h5"
                 color="textSecondary"
-                className={classes.text}
+                className={`${classes.text} ${classes.subtitle}`}
             >
                 {props.secondaryText}
             </Typography>

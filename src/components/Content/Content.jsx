@@ -57,23 +57,65 @@ function Receipts({ currentGroup, groupDeleted }) {
         setCurrentReceipt(receiptData);
     };
 
-    const handleReceiptChanged = (snap) => {
-        const newValue = {
-            ...currentReceipt.value,
-            total: snap.val(),
-        };
-        setCurrentReceipt((prev) => ({ key: prev.key, value: newValue }));
+    const handleTotalChanged = (snap) => {
+        if (typeof snap.val() === 'number') {
+            setCurrentReceipt((prev) => ({
+                key: prev.key,
+                value: {
+                    ...prev.value,
+                    total: snap.val(),
+                },
+            }));
+        }
     };
 
+    const handleItemDeleted = (snap) => {
+        if (typeof snap.val() === 'object') {
+            setCurrentReceipt((prev) => ({
+                key: prev.key,
+                value: {
+                    ...prev.value,
+                    items: snap.val(),
+                },
+            }));
+        }
+    };
+
+    const handleItemsListDeleted = () => {
+        setCurrentReceipt((prev) => ({
+            key: prev.key,
+            value: {
+                ...prev.value,
+                items: null,
+            },
+        }));
+    };
+
+    // This will run for all item deletions except for the last, since it not only changes the list but it deletes it
     useEffect(() => {
         subscribeToEvent(
             'child_changed',
             `/receipts/${currentGroup.key}/${currentReceipt.key}`,
-            [handleReceiptChanged]
+            [handleTotalChanged, handleItemDeleted]
         );
         return () => {
             unsubscribeFromEvents(
                 'child_changed',
+                `/receipts/${currentGroup.key}/${currentReceipt.key}`
+            );
+        };
+    });
+
+    // This will run when the last item is deleted from the receipt
+    useEffect(() => {
+        subscribeToEvent(
+            'child_removed',
+            `/receipts/${currentGroup.key}/${currentReceipt.key}`,
+            [handleItemsListDeleted]
+        );
+        return () => {
+            unsubscribeFromEvents(
+                'child_removed',
                 `/receipts/${currentGroup.key}/${currentReceipt.key}`
             );
         };

@@ -34,6 +34,7 @@ function ItemsList({ items, groupId, currency, receiptData, groupMembers }) {
                     key={item}
                     id={item}
                     groupId={groupId}
+                    receiptId={receiptData.key}
                     members={groupMembers}
                     currency={currency}
                     updateTotal={changeReceiptTotal}
@@ -42,7 +43,7 @@ function ItemsList({ items, groupId, currency, receiptData, groupMembers }) {
         </div>
     ) : (
         <Placeholder
-            primaryText={'No receipt is open'}
+            primaryText={"Looks like there's nothing here"}
             secondaryText={
                 'Click on one of your receipts, or scan a new one to see your items'
             }

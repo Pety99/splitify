@@ -1,7 +1,6 @@
 import { Avatar, makeStyles, Tooltip } from '@material-ui/core';
 import { ToggleButton } from '@material-ui/lab';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
     avatar: {
@@ -22,14 +21,13 @@ const useStyles = makeStyles((theme) => ({
 
 function Avatars(props) {
     const classes = useStyles();
-    const [selected, setSelected] = useState(false);
     return (
         <ToggleButton
             key={`member.email`}
             value="check"
-            selected={selected}
+            selected={props.selected}
             onChange={() => {
-                setSelected(!selected);
+                props.handleSelectedChange(props.id, props.selected ? false: true);
             }}
             className={classes.toggle}
         >
@@ -48,6 +46,9 @@ function Avatars(props) {
 Avatars.propTypes = {
     name: PropTypes.string,
     profilePricture: PropTypes.string,
+    selected: PropTypes.bool,
+    id: PropTypes.any,
+    handleSelectedChange: PropTypes.func,
 };
 
 export default Avatars;

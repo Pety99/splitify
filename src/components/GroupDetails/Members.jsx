@@ -35,13 +35,13 @@ const useStyles = makeStyles((theme) => ({
 
 function Members({ currentGroup, members, setMembers }) {
     const classes = useStyles();
-
     useEffect(async () => {
+        setMembers(() => []);
         for (const id of Object.keys(currentGroup.value.members)) {
             const snap = await getUserById(id);
-            setMembers((previousMembers) => [...previousMembers, snap.val()]);
+            setMembers((previousMembers) => [...previousMembers, {...snap.val(), key: snap.key}]);
         }
-    }, []);
+    }, currentGroup?.key);
 
     return (
         <Box display="flex" flexWrap={'wrap'}>

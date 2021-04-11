@@ -26,15 +26,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Avatars(props) {
+    const handleSelectedChange = (key, isSelected) => {
+        const newPayers = {
+            ...props.payers,
+        };
+        newPayers[key] = isSelected;
+
+        const payersCount = Object.values(newPayers).reduce(
+            (acc, value) => (value == true ? acc + 1 : acc),
+            0
+        );
+
+        if (payersCount > 0) {
+            props.handlePayersChanged(newPayers);
+        }
+    };
     const classes = useStyles();
     return (
         <div className={classes.root}>
             {props.members.map((m) => (
                 <Avatar
                     name={m.username}
+                    selected={props.payers && props.payers[m.key] == true}
                     profilePricture={m.profile_picture}
-                    key={m.email}
+                    key={m.key}
+                    id={m.key}
                     className={classes.avatar}
+                    handleSelectedChange={handleSelectedChange}
                 ></Avatar>
             ))}
         </div>
@@ -43,6 +61,9 @@ function Avatars(props) {
 
 Avatars.propTypes = {
     members: PropTypes.array,
+    payers: PropTypes.object,
+    handleTextChange: PropTypes.func,
+    handlePayersChanged: PropTypes.func,
 };
 
 export default Avatars;

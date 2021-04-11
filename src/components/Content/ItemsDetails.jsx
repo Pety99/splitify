@@ -47,7 +47,7 @@ function ItemsDetails({ data }) {
                         color="textSecondary"
                         className={classes.price}
                     >
-                        {data.total.toFixed(2) +
+                        {((data && data?.total.toFixed(2)) || 0) +
                             ' ' +
                             getSymbolFromCurrency(data.currency) || '?'}
                     </Typography>

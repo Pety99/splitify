@@ -1,30 +1,13 @@
 import PropTypes from 'prop-types';
 import ItemsList from '../Content/ItemsList';
 import ItemsDetails from '../Content/ItemsDetails';
-import { makeStyles, Typography } from '@material-ui/core';
 import { Fragment } from 'react';
-
-const useStyles = makeStyles(() => ({
-    title: {
-        fontWeight: 500,
-    },
-}));
+import ItemsActions from '../Content/ItemsActions';
 
 function RightPanel({ receiptData, currentGroup, groupMembers }) {
-    const classes = useStyles();
-
     return (
         <Fragment>
-            <Typography
-                variant="h5"
-                component="p"
-                gutterBottom
-                align="left"
-                color="textPrimary"
-                className={classes.title}
-            >
-                Items
-            </Typography>
+            <ItemsActions />
             <ItemsDetails data={receiptData?.value} />
             <ItemsList
                 items={Array.from(Object.keys(receiptData?.value?.items || {}))}
