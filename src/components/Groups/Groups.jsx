@@ -6,15 +6,9 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
-    makeStyles,
     Paper,
 } from '@material-ui/core';
-import {
-    ExpandLess,
-    ExpandMore,
-    Group,
-    FiberManualRecord,
-} from '@material-ui/icons';
+import { ExpandLess, ExpandMore, Group } from '@material-ui/icons';
 
 import PropTypes from 'prop-types';
 
@@ -24,15 +18,9 @@ import {
     unsubscribeFromEvents,
     findGroupById,
 } from '../../database';
+import GroupItem from './GroupItem';
 
 function groups({ setGroup }) {
-    const useStyle = makeStyles((theme) => ({
-        nested: {
-            paddingLeft: theme.spacing(4),
-        },
-    }));
-    const classes = useStyle();
-
     const [groups, setGroups] = useState([]);
     const [open, setOpen] = useState(true);
     const [currentUser] = useState(auth.currentUser);
@@ -55,16 +43,12 @@ function groups({ setGroup }) {
     };
 
     useEffect(() => {
-        subscribeToEvent(
-            'child_added',
-            `/users/${currentUser.uid}/groups`,
-            [handleGroupCreated]
-        );
-        subscribeToEvent(
-            'child_removed',
-            `/users/${currentUser.uid}/groups`,
-            [handleGroupDeleted]
-        );
+        subscribeToEvent('child_added', `/users/${currentUser.uid}/groups`, [
+            handleGroupCreated,
+        ]);
+        subscribeToEvent('child_removed', `/users/${currentUser.uid}/groups`, [
+            handleGroupDeleted,
+        ]);
         return () => {
             unsubscribeFromEvents(
                 'child_added',
@@ -97,17 +81,11 @@ function groups({ setGroup }) {
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         {groups.map((g) => (
-                            <ListItem
-                                button
+                            <GroupItem
                                 key={g.key}
-                                className={classes.nested}
-                                onClick={() => setGroup(g)}
-                            >
-                                <ListItemIcon>
-                                    <FiberManualRecord />
-                                </ListItemIcon>
-                                <ListItemText primary={g.value.name} />
-                            </ListItem>
+                                group={g}
+                                setGroup={setGroup}
+                            />
                         ))}
                     </List>
                 </Collapse>

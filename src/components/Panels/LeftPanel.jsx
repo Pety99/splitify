@@ -106,6 +106,7 @@ function LeftPanel(props) {
                     groupId={props.groupId}
                     skeletons={skeletons}
                     removeSkeleton={removeSkeleton}
+                    setCurrentReceipt={props.setCurrentReceipt}
                 />
             </Paper>
         </Fragment>
@@ -115,5 +116,6 @@ function LeftPanel(props) {
 LeftPanel.propTypes = {
     toggleLeftSide: PropTypes.func,
     groupId: PropTypes.string,
+    setCurrentReceipt: PropTypes.func,
 };
 export default LeftPanel;

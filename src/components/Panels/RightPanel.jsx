@@ -7,13 +7,21 @@ import ItemsActions from '../Content/ItemsActions';
 function RightPanel({ receiptData, currentGroup, groupMembers }) {
     return (
         <Fragment>
-            <ItemsActions />
-            <ItemsDetails data={receiptData?.value} />
+            <ItemsActions
+                itemCount={
+                    receiptData.value
+                        ? Object.keys(receiptData.value?.items || {}).length
+                        : -1
+                }
+                groupId={currentGroup.key}
+                receiptId={receiptData.key}
+            />
+            <ItemsDetails data={receiptData.value} />
             <ItemsList
-                items={Array.from(Object.keys(receiptData?.value?.items || {}))}
+                items={Array.from(Object.keys(receiptData.value?.items || {}))}
                 groupId={currentGroup.key}
                 groupMembers={groupMembers}
-                currency={receiptData?.value?.currency}
+                currency={receiptData.value?.currency}
                 receiptData={receiptData}
             />
         </Fragment>

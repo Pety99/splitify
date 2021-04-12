@@ -40,6 +40,9 @@ export const unsubscribeFromEvents = function (type, path) {
     ref.off(type);
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// User methods
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const createUser = function (user) {
     // Check if the user already exists
     db.ref('users/' + user.uid).once('value', (snap) => {
@@ -84,6 +87,10 @@ export const getUserByEmail = function (email, callback) {
             callback(userToDisplay);
         });
 };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Group methods
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Helper function.
@@ -131,7 +138,6 @@ export const createGroup = function (currentUser, data) {
 export const findGroupById = async function (id) {
     const snap = await db.ref().child(`groups/${id}`).once('value');
 
-    // Restructure the data
     const ret = {
         key: id,
         value: snap.val(),
@@ -152,6 +158,10 @@ export const deleteGroup = function (groupKey, membersKeys) {
     db.ref().update(updates);
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Item methods
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export const findItemById = async function (id, groupId) {
     const snap = await db.ref().child(`items/${groupId}/${id}`).once('value');
 
@@ -163,6 +173,13 @@ export const findItemById = async function (id, groupId) {
     return ret;
 };
 
+export const updateItem = function (groupKey, itemKey, data) {
+    const updates = {};
+    updates[`items/${groupKey}/${itemKey}`] = data;
+
+    db.ref().update(updates);
+};
+
 export const deleteItem = async function (groupKey, receiptKey, itemKey) {
     const updates = {};
     updates[`items/${groupKey}/${itemKey}`] = null;
@@ -171,15 +188,33 @@ export const deleteItem = async function (groupKey, receiptKey, itemKey) {
     db.ref().update(updates);
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Receipt methods
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export const updateReceiptTotal = function (groupKey, receiptKey, total) {
     const updates = {};
     updates[`receipts/${groupKey}/${receiptKey}/total`] = total;
     db.ref().update(updates);
 };
 
-export const updateItem = function (groupKey, itemKey, data) {
+export const deleteReceipt = function (groupKey, receiptKey) {
     const updates = {};
-    updates[`items/${groupKey}/${itemKey}`] = data;
 
-    db.ref().update(updates);
+    db.ref()
+        .child(`receipts/${groupKey}/${receiptKey}/items`)
+        .once('value')
+        .then((snapshot) => {
+            // If there are no items an empty array is assigned
+            const items = snapshot.val() ? Object.keys(snapshot.val()) : [];
+
+            // Delete the items of the receipt
+            for (const i of items) {
+                updates[`items/${groupKey}/${i}`] = null;
+            }
+            // Delete the receipt
+            updates[`receipts/${groupKey}/${receiptKey}`] = null;
+
+            db.ref().update(updates);
+        });
 };

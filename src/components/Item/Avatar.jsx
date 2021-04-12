@@ -27,7 +27,10 @@ function Avatars(props) {
             value="check"
             selected={props.selected}
             onChange={() => {
-                props.handleSelectedChange(props.id, props.selected ? false: true);
+                props.handleSelectedChange(
+                    props.id,
+                    props.selected ? false : true
+                );
             }}
             className={classes.toggle}
         >

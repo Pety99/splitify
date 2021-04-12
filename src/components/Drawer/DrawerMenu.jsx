@@ -16,10 +16,8 @@ import CreateGroup from '../../components/CreateGroup/CreateGroup';
 
 import { auth } from '../../firebase';
 import { Box, Button } from '@material-ui/core';
-import { Delete, ExitToApp } from '@material-ui/icons';
+import { ExitToApp } from '@material-ui/icons';
 import Content from '../Content/Content';
-import AlertDialog from '../GroupDetails/Alert';
-import { deleteGroup } from '../../database';
 
 const drawerWidth = 240;
 
@@ -73,7 +71,6 @@ function ResponsiveDrawer() {
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [selectedGroup, setSelecetedGroup] = useState('');
-    const [alertOpen, setAlertOpen] = useState(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -104,14 +101,6 @@ function ResponsiveDrawer() {
     const container =
         window !== undefined ? () => window.document.body : undefined;
 
-    const deleteThisGroup = function () {
-        deleteGroup(
-            selectedGroup.key,
-            Object.keys(selectedGroup.value.members)
-        );
-        setSelecetedGroup('');
-    };
-
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -129,23 +118,6 @@ function ResponsiveDrawer() {
                     <Typography variant="h6" className={classes.title}>
                         {selectedGroup?.value?.name || ''}
                     </Typography>
-                    <IconButton
-                        className={classes.icon}
-                        aria-label="delete"
-                        onClick={() => setAlertOpen(!alertOpen)}
-                    >
-                        <Delete className={classes.medium} />
-                        <AlertDialog
-                            title={'Do you want to delete this group?'}
-                            content={
-                                'Warning! This will remove everything, including the receipts!'
-                            }
-                            ok={'Yes'}
-                            cancel={'No'}
-                            open={alertOpen}
-                            okClickHandler={deleteThisGroup}
-                        />
-                    </IconButton>
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="mailbox folders">

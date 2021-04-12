@@ -36,11 +36,18 @@ function ReceiptsList(props) {
         subscribeToEvent('child_changed', `/receipts/${props.groupId}`, [
             handleReceiptChanged,
         ]);
+        subscribeToEvent('child_removed', `/receipts/${props.groupId}`, [
+            handleReceiptDeleted,
+        ]);
         return () => {
             unsubscribeFromEvents('child_added', `/receipts/${props.groupId}`);
             setReceipts([]);
             unsubscribeFromEvents(
                 'child_changed',
+                `/receipts/${props.groupId}`
+            );
+            unsubscribeFromEvents(
+                'child_removed',
                 `/receipts/${props.groupId}`
             );
             setReceipts([]);
@@ -65,6 +72,13 @@ function ReceiptsList(props) {
         ]);
     };
 
+    const handleReceiptDeleted = async (receiptSnap) => {
+        await setReceipts((perviousReceipts) => [
+            ...perviousReceipts.filter((r) => r.key != receiptSnap.key),
+        ]);
+        props.setCurrentReceipt({});
+    };
+
     return (
         <div className={classes.root}>
             {loadSkeletons()}
@@ -84,5 +98,6 @@ ReceiptsList.propTypes = {
     groupId: PropTypes.string,
     skeletons: PropTypes.number,
     removeSkeleton: PropTypes.func,
+    setCurrentReceipt: PropTypes.func,
 };
 export default ReceiptsList;

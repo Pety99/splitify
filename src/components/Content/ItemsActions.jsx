@@ -1,7 +1,9 @@
 import { IconButton, makeStyles, Typography } from '@material-ui/core';
 import { Add, Delete } from '@material-ui/icons';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import AlertDialog from '../GroupDetails/Alert';
+import PropTypes from 'prop-types';
+import { deleteReceipt } from '../../database';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -10,20 +12,26 @@ const useStyles = makeStyles(() => ({
     title: {
         fontWeight: 500,
     },
-    item: {
+    item1: {
         marginTop: -6,
-    },
-    right: {
         marginLeft: 'auto',
+    },
+    item2: {
+        marginTop: -6,
+        marginRight: -12,
     },
 }));
 
-function ItemsActions() {
+function ItemsActions({ itemCount, groupId, receiptId }) {
     const classes = useStyles();
 
     const [alertOpen, setAlertOpen] = useState(false);
 
-    const handleReceiptDeleted = () => {};
+    const handleReceiptDeleted = () => {
+        console.log(receiptId);
+        console.log(groupId);
+        deleteReceipt(groupId, receiptId);
+    };
 
     return (
         <div className={classes.root}>
@@ -37,28 +45,41 @@ function ItemsActions() {
             >
                 Items
             </Typography>
-            <IconButton
-                className={`${classes.item} ${classes.right}`}
-                onClick={() => setAlertOpen(/*TODO*/ !alertOpen)}
-            >
-                <Add size="small" />
-            </IconButton>
-            <IconButton
-                className={classes.item}
-                onClick={() => setAlertOpen(/*TODO*/ !alertOpen)}
-            >
-                <Delete size="small" />
-                <AlertDialog
-                    title={'Do you want to delete this item?'}
-                    content={'If you delete the item you can not undo it!'}
-                    ok={'Yes'}
-                    cancel={'No'}
-                    open={alertOpen}
-                    okClickHandler={handleReceiptDeleted}
-                />
-            </IconButton>
+            {itemCount >= 0 && (
+                <Fragment>
+                    <IconButton
+                        className={classes.item1}
+                        onClick={() => setAlertOpen(/*TODO*/ !alertOpen)}
+                    >
+                        <Add size="small" />
+                    </IconButton>
+
+                    <IconButton
+                        className={classes.item2}
+                        onClick={() => setAlertOpen(!alertOpen)}
+                    >
+                        <Delete size="small" />
+                        <AlertDialog
+                            title={'Do you want to delete this reciept?'}
+                            content={
+                                'If you delete the reciept you can not undo it!'
+                            }
+                            ok={'Yes'}
+                            cancel={'No'}
+                            open={alertOpen}
+                            okClickHandler={handleReceiptDeleted}
+                        />
+                    </IconButton>
+                </Fragment>
+            )}
         </div>
     );
 }
+
+ItemsActions.propTypes = {
+    itemCount: PropTypes.number,
+    groupId: PropTypes.string,
+    receiptId: PropTypes.string,
+};
 
 export default ItemsActions;

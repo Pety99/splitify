@@ -50,6 +50,7 @@ function Receipts({ currentGroup, groupDeleted }) {
     const [rightShowOnLeft, setRightShownOnLeft] = useState(false);
     const [members, setMembers] = useState([]);
     const { width } = useWindowDimensions();
+
     const toggleLeftSide = (receiptData) => {
         if (width < 960) {
             setRightShownOnLeft(!rightShowOnLeft);
@@ -121,6 +122,12 @@ function Receipts({ currentGroup, groupDeleted }) {
         };
     });
 
+    // When the user clicks on a different group the previously viewed reciept from the other group is hidden.
+    useEffect(() => {
+        // The condition is needed, unless the useEffects get in an endless loop
+        if (currentGroup.key != null) setCurrentReceipt({});
+    }, currentGroup.key);
+
     const leftSide = rightShowOnLeft ? (
         <RightPanelForMobile
             backButtonClickHandler={toggleLeftSide}
@@ -129,7 +136,11 @@ function Receipts({ currentGroup, groupDeleted }) {
             members={members}
         />
     ) : (
-        <LeftPanel toggleLeftSide={toggleLeftSide} groupId={currentGroup.key} />
+        <LeftPanel
+            toggleLeftSide={toggleLeftSide}
+            groupId={currentGroup.key}
+            setCurrentReceipt={setCurrentReceipt}
+        />
     );
 
     return currentGroup ? (
