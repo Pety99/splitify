@@ -161,6 +161,17 @@ export const deleteGroup = function (groupKey, membersKeys) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Item methods
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const getItems = async function (groupId) {
+    const snap = await db.ref().child(`items/${groupId}`).once('value');
+    const result = [];
+    for (const [key, value] of Object.entries(snap.val() || {})) {
+        result.push({
+            key: key,
+            value: value,
+        });
+    }
+    return result;
+};
 
 export const findItemById = async function (id, groupId) {
     const snap = await db.ref().child(`items/${groupId}/${id}`).once('value');

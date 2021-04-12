@@ -14,6 +14,8 @@ function AlertDialog(props) {
         if (e.target.textContent == props.ok) {
             console.log('delete');
             props.okClickHandler();
+        } else {
+            props?.closeHandler();
         }
     };
 
@@ -58,6 +60,7 @@ AlertDialog.propTypes = {
     ok: PropTypes.string,
     open: PropTypes.bool,
     okClickHandler: PropTypes.func,
+    closeHandler: PropTypes.func,
 };
 
 export default AlertDialog;

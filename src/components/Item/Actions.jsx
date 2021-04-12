@@ -46,6 +46,7 @@ function Actions(props) {
                     cancel={'No'}
                     open={alertOpen}
                     okClickHandler={props.delete}
+                    closeHandler={() => setAlertOpen(!alertOpen)}
                 />
             </IconButton>
             <IconButton className={classes.edit} onClick={props.toggleEdit}>

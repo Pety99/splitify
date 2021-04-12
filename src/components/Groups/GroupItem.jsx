@@ -75,6 +75,7 @@ function GroupItem({ group, setGroup }) {
                 cancel={'No'}
                 open={alertOpen}
                 okClickHandler={deleteThisGroup}
+                closeHandler={() => setAlertOpen(!alertOpen)}
             />
         </Fragment>
     );

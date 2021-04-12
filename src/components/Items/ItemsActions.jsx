@@ -68,6 +68,7 @@ function ItemsActions({ itemCount, groupId, receiptId }) {
                             cancel={'No'}
                             open={alertOpen}
                             okClickHandler={handleReceiptDeleted}
+                            closeHandler={() => setAlertOpen(!alertOpen)}
                         />
                     </IconButton>
                 </Fragment>

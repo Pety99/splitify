@@ -43,19 +43,22 @@ function RightPanelForMobile(props) {
             </Hidden>
             <Hidden mdUp>
                 <div className={classes.root}>
-                    <Button
-                        onClick={props.backButtonClickHandler}
-                        className={classes.back}
-                        startIcon={<ArrowBackIos />}
-                    >
-                        Back
-                    </Button>
+                    {props.selectedChipIndex != 1 && (
+                        <Button
+                            onClick={props.backButtonClickHandler}
+                            className={classes.back}
+                            startIcon={<ArrowBackIos />}
+                        >
+                            Back
+                        </Button>
+                    )}
                 </div>
                 <Divider className={classes.hr} />
                 <RightPanel
                     receiptData={props.receiptData}
                     currentGroup={props.currentGroup}
                     groupMembers={props.members}
+                    isAnalytics={props.selectedChipIndex == 1}
                 />
             </Hidden>
         </Fragment>
@@ -67,6 +70,7 @@ RightPanelForMobile.propTypes = {
     receiptData: PropTypes.object,
     currentGroup: PropTypes.object,
     members: PropTypes.array,
+    selectedChipIndex: PropTypes.number,
 };
 
 export default RightPanelForMobile;

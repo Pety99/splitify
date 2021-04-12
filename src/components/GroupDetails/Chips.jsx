@@ -10,9 +10,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Chips(props) {
+function Chips({ data, setSelectedIndex }) {
     const classes = useStyles();
-    const data = props.data;
     const [chips, setChips] = useState([
         { ...data[0], active: true },
         ...data.slice(1).map((d) => ({ ...d, active: false })),
@@ -20,8 +19,9 @@ function Chips(props) {
 
     const handleClick = (e) => {
         setChips(
-            chips.map((c) => {
+            chips.map((c, index) => {
                 if (c.name === e.target.textContent) {
+                    setSelectedIndex(index);
                     c.active = true;
                     return c;
                 } else {
@@ -50,5 +50,6 @@ function Chips(props) {
 
 Chips.propTypes = {
     data: PropTypes.array,
+    setSelectedIndex: PropTypes.func,
 };
 export default Chips;
