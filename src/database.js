@@ -161,8 +161,8 @@ export const deleteGroup = function (groupKey, membersKeys) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Item methods
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const getItems = async function (groupId) {
-    const snap = await db.ref().child(`items/${groupId}`).once('value');
+export const getItems = async function (groupKey) {
+    const snap = await db.ref().child(`items/${groupKey}`).once('value');
     const result = [];
     for (const [key, value] of Object.entries(snap.val() || {})) {
         result.push({
@@ -173,12 +173,15 @@ export const getItems = async function (groupId) {
     return result;
 };
 
-export const findItemById = async function (id, groupId) {
-    const snap = await db.ref().child(`items/${groupId}/${id}`).once('value');
+export const findItemById = async function (itemKey, groupKey) {
+    const snap = await db
+        .ref()
+        .child(`items/${groupKey}/${itemKey}`)
+        .once('value');
 
     // Restructure the data
     const ret = {
-        key: id,
+        key: itemKey,
         value: snap.val(),
     };
     return ret;
@@ -202,6 +205,18 @@ export const deleteItem = async function (groupKey, receiptKey, itemKey) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Receipt methods
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const getReceipts = async function (groupKey) {
+    const snap = await db.ref().child(`receipts/${groupKey}`).once('value');
+    const result = [];
+    for (const [key, value] of Object.entries(snap.val() || {})) {
+        result.push({
+            key: key,
+            value: value,
+        });
+    }
+    return result;
+};
 
 export const updateReceiptTotal = function (groupKey, receiptKey, total) {
     const updates = {};

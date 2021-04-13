@@ -29,7 +29,7 @@ function Actions(props) {
             </Button>
 
             <IconButton onClick={props.toggleEdit}>
-                <Clear size="small" />
+                <Clear size="small" color="secondary" />
             </IconButton>
         </Fragment>
     ) : (
@@ -50,7 +50,7 @@ function Actions(props) {
                 />
             </IconButton>
             <IconButton className={classes.edit} onClick={props.toggleEdit}>
-                <Create size="small" />
+                <Create size="small" color="primary" />
             </IconButton>
         </Fragment>
     );

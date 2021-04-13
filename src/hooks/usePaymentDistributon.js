@@ -7,7 +7,7 @@ export default function usePaymentDistributon(callback, groupId, groupMembers) {
         const data = calulateTotalForUsers(items, groupMembers);
         const result = formatData(data, groupMembers);
         callback(result);
-    });
+    }, [groupId, groupMembers]);
 }
 
 function calulateTotalForUsers(items, groupMembers) {
@@ -41,7 +41,7 @@ function formatData(data, groupMembers) {
             id: member.username,
             label: member.username,
             value: data.get(member.key),
-            color: 'hsl(274, 70%, 50%)',
+            color: 'hsl(242, 77%, 63%)',
         });
     }
 

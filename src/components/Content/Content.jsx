@@ -41,6 +41,12 @@ const useStyles = makeStyles((theme) => {
             margin: theme.spacing(1),
             height: 'auto',
         },
+        test: {
+            width: 'calc(100vw - 24px)',
+            [theme.breakpoints.up('md')]: {
+                width: 'unset',
+            },
+        },
         glass: glass,
     };
 });
@@ -156,6 +162,7 @@ function Receipts({ currentGroup, groupDeleted }) {
             currentGroup={currentGroup}
             members={members}
             selectedChipIndex={selectedChipIndex}
+            lg={8}
         />
     ) : (
         <LeftPanel
@@ -178,7 +185,7 @@ function Receipts({ currentGroup, groupDeleted }) {
                 setMembers={setMembers}
             ></Members>
             <Grid container spacing={3} className={classes.container}>
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} md={6} lg={4} className={classes.test}>
                     <Fragment>{leftSide}</Fragment>
                 </Grid>
                 <Hidden smDown>

@@ -1,6 +1,7 @@
-import { makeStyles, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { Fragment, useState } from 'react';
 import usePaymentDistributon from '../../hooks/usePaymentDistributon';
+import usePaymentInfo from '../../hooks/usePaymentInfo';
 import Chart from './Chart';
 import PaymentsList from './PaymentsList';
 import PropTypes from 'prop-types';
@@ -26,10 +27,17 @@ const useStyles = makeStyles(() => ({
 function AnalyticsPanel(props) {
     const classes = useStyles();
     const [chartData, setChartData] = useState([]);
+    const [paymnetInfo, setPaymentInfo] = useState([]);
     const [currency, setCurrency] = useState('HUF');
+
+    // TODO
+    // These hook is beign called multiple times (4-6)
+    // This is because the group members are loaded one by one
 
     // This hook calculates the chart data every time the component is re rendered
     usePaymentDistributon(setChartData, props.groupId, props.groupMembers);
+
+    usePaymentInfo(setPaymentInfo, props.groupId, props.groupMembers, currency);
 
     return (
         <Fragment>
@@ -46,9 +54,16 @@ function AnalyticsPanel(props) {
                 </Typography>
                 <SelectCurrency setCurrency={setCurrency} currency={currency} />
             </div>
+
             <div className={classes.root}>
-                <Chart data={chartData} currency={currency} />
-                <PaymentsList />
+                <Grid container spacing={3}>
+                    <Grid item xs={12} lg={6} container justify="center">
+                        <Chart data={chartData} currency={currency} />
+                    </Grid>
+                    <Grid item xs={12} lg={6}>
+                        <PaymentsList data={paymnetInfo} />{' '}
+                    </Grid>
+                </Grid>
             </div>
         </Fragment>
     );

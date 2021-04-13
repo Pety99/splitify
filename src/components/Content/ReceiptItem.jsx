@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     rightPart: {
+        color: theme.palette.primary.main,
         alignContent: 'center',
         justifyContent: 'center',
         height: '100%',

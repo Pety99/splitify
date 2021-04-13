@@ -16,7 +16,9 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(2),
     },
     price: {
+        color: theme.palette.primary.main,
         marginLeft: 'auto',
+        marginRight: theme.spacing(1),
     },
 }));
 function ItemsDetails({ data }) {

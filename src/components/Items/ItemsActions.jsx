@@ -51,7 +51,7 @@ function ItemsActions({ itemCount, groupId, receiptId }) {
                         className={classes.item1}
                         onClick={() => setAlertOpen(/*TODO*/ !alertOpen)}
                     >
-                        <Add size="small" />
+                        <Add size="small" color="primary" />
                     </IconButton>
 
                     <IconButton

@@ -1,9 +1,23 @@
 import { useState, useEffect } from 'react';
 import MainPage from '../MainPage/MainPage';
 import LoginPage from '../LoginPage/LoginPage';
-
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import { auth } from '../../firebase';
 import { createUser } from '../../database';
+
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: '#5a56e9',
+        },
+        error: {
+            main: '#e33371',
+        },
+        secondary: {
+            main: '#fab8c4',
+        },
+    },
+});
 
 function App() {
     const [isSignedIn, setSignedIn] = useState(false);
@@ -18,7 +32,11 @@ function App() {
         return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
     }, []);
 
-    return isSignedIn ? <MainPage /> : <LoginPage />;
+    return (
+        <ThemeProvider theme={theme}>
+            {isSignedIn ? <MainPage /> : <LoginPage />}
+        </ThemeProvider>
+    );
 }
 
 export default App;

@@ -28,9 +28,9 @@ function Chart({ data, currency }) {
                 margin={{ top: 40, right: 0, bottom: 80, left: 0 }}
                 valueFormat={format}
                 innerRadius={0.5}
-                padAngle={0.7}
+                padAngle={2}
                 cornerRadius={3}
-                colors={{ scheme: 'nivo' }}
+                colors={{ scheme: 'pastel2' }}
                 borderWidth={1}
                 borderColor={{
                     from: 'color',
