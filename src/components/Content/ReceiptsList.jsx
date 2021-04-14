@@ -6,9 +6,11 @@ import { subscribeToEvent, unsubscribeFromEvents } from '../../database';
 import ReceiptItemSkeleton from '../Skeletons/ReceiptSkeleton';
 import { makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        maxHeight: `calc(100vh - 440px - 8px)`,
+        [theme.breakpoints.up('md')]: {
+            maxHeight: `calc(100vh - 464px - 8px)`,
+        },
         minHeight: 300,
         borderRadius: 15,
         overflowY: 'auto',

@@ -1,9 +1,16 @@
 import { Chip, makeStyles } from '@material-ui/core';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        [theme.breakpoints.up('md')]: {
+            justifyContent: 'flex-start',
+        },
+    },
     chip: {
         margin: theme.spacing(1),
         marginRight: theme.spacing(0.25),
@@ -33,7 +40,7 @@ function Chips({ data, setSelectedIndex }) {
     };
 
     return (
-        <Fragment>
+        <div className={classes.root}>
             {chips.map((chip) => (
                 <Chip
                     key={chip.name}
@@ -44,7 +51,7 @@ function Chips({ data, setSelectedIndex }) {
                     className={classes.chip}
                 />
             ))}
-        </Fragment>
+        </div>
     );
 }
 

@@ -12,6 +12,9 @@ import ValidatingInput from './ValidatingInput';
 import { createGroup } from '../../database';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        background: 'blue',
+    },
     title: {
         textAlign: 'center',
         fontSize: '4rem',
@@ -111,6 +114,15 @@ function SimpleDialog(props) {
             open={open}
             maxWidth="sm"
             fullWidth={true}
+            PaperProps={{
+                style: {
+                    background: 'rgba( 255, 255, 255, 0.85 )',
+                    WeboxShadow: '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
+                    backdropFilter: 'blur( 4px )',
+                    borderRadius: '15px',
+                    border: '1px solid rgba( 255, 255, 255, 0.18 )',
+                },
+            }}
         >
             <DialogTitle className={classes.title} id="simple-dialog-title">
                 Create new group
@@ -127,7 +139,7 @@ function SimpleDialog(props) {
             />
             <Box className={classes.buttons}>
                 <Button
-                    color="secondary"
+                    color="primary"
                     className={`${classes.button} ${classes.margin}`}
                     onClick={() => handleExitClick()}
                 >

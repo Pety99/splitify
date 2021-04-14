@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
 function PaymentsList({ data }) {
     const classes = useStyles();
 
-    console.log(data);
     return (
         <div className={classes.root}>
             {data.map((entry) => (

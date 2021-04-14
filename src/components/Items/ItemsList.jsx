@@ -6,9 +6,11 @@ import Item from '../Item/Item';
 import { makeStyles } from '@material-ui/core';
 import { updateReceiptTotal } from '../../database';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        maxHeight: `calc(100vh - 332px - 8px)`,
+        [theme.breakpoints.up('md')]: {
+            maxHeight: `calc(100vh - 388px - 8px)`,
+        },
         minHeight: 300,
         borderRadius: 15,
         overflowY: 'auto',

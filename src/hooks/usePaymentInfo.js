@@ -14,9 +14,11 @@ export default function usePaymentInfo(
 
         const itemsMap = joinItemsAndReceipts(items, receipts);
         let debtMap = collectDebt(itemsMap, groupMembers);
-        debtMap = getReleantDebtData(debtMap);
-        transform(debtMap, groupMembers, currency);
-        callback(Array.from(debtMap));
+        if (debtMap) {
+            debtMap = getRelevantDebtData(debtMap);
+            transform(debtMap, groupMembers, currency);
+            callback(Array.from(debtMap));
+        }
     }, [groupId, groupMembers, currency]);
 }
 
@@ -89,6 +91,7 @@ function collectDebt(itemsMap, groupMembers) {
  */
 function addDebt(debtMap, debtor, creditor, amount) {
     const mapOfDebtor = debtMap.get(debtor);
+    if (!mapOfDebtor) return;
     if (mapOfDebtor.has(creditor)) {
         const currentDebt = mapOfDebtor.get(creditor);
         mapOfDebtor.set(creditor, currentDebt + amount);
@@ -104,11 +107,11 @@ function addDebt(debtMap, debtor, creditor, amount) {
  * @param {Map<>} debtMap
  * @returns return a map of UserIDs and debts the amount indicates how much you owe them
  */
-function getReleantDebtData(debtMap) {
+function getRelevantDebtData(debtMap) {
     //console.log(debtMap);
     const userID = auth.currentUser.uid;
 
-    const iOwe = Array.from(debtMap.get(userID).entries());
+    const iOwe = Array.from(debtMap.get(userID)?.entries() || []);
 
     const othersOweMe = [];
     for (const [payerID, map] of debtMap.entries()) {
