@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
         height: 120,
         marginTop: theme.spacing(0.7),
         marginBottom: theme.spacing(0.7),
+        [theme.breakpoints.down('sm')]: {
+            margin: theme.spacing(1.2),
+            boxShadow: '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
+        },
     },
     glass: glass,
     container: {
@@ -39,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
     leftPart: {
         alignContent: 'center',
+        alignItems: 'center',
         height: '100%',
         marginLeft: theme.spacing(2),
         marginRight: theme.spacing(2),

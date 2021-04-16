@@ -7,7 +7,7 @@ import PaymentsList from './PaymentsList';
 import PropTypes from 'prop-types';
 import SelectCurrency from './SelectCurrency';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'row',
@@ -17,6 +17,9 @@ const useStyles = makeStyles(() => ({
     },
     title: {
         fontWeight: 500,
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: theme.spacing(-1),
+        },
     },
     top: {
         display: 'flex',

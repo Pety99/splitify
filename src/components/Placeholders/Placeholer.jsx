@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        margin: 'auto',
     },
     image: {
         maxWidth: 500,

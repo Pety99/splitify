@@ -8,13 +8,20 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        [theme.breakpoints.up('md')]: {
-            maxHeight: `calc(100vh - 464px - 8px)`,
-        },
+        paddingTop: '40px',
+        paddingBottom: '40px',
         minHeight: 300,
         borderRadius: 15,
         overflowY: 'auto',
         overflowX: 'hidden',
+        [theme.breakpoints.down('sm')]: {
+            width: '100vw',
+            margin: theme.spacing(-3),
+        },
+        [theme.breakpoints.up('md')]: {
+            maxHeight: `calc(100vh - 464px - 8px)`,
+            padding: 0,
+        },
     },
 }));
 

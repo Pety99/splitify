@@ -12,16 +12,16 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
     },
     back: {
-        marginTop: -theme.spacing(11.5),
+        marginTop: -theme.spacing(13.5),
         borderRadius: theme.spacing(6),
         paddingLeft: theme.spacing(4),
         paddingRight: theme.spacing(4),
         height: '100%',
         marginRight: 'auto',
-        marginLeft: theme.spacing(-3),
+        marginLeft: theme.spacing(-4),
     },
     hr: {
-        margin: `${theme.spacing(3)}px ${theme.spacing(0)}px`,
+        margin: `${theme.spacing(3)}px ${theme.spacing(-3)}px`,
     },
 }));
 

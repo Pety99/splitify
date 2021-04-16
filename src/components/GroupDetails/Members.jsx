@@ -6,10 +6,19 @@ import { getUserById } from '../../database';
 import Avatars from './Avatars';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        [theme.breakpoints.down('sm')]: {
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(1),
+        },
+    },
     title: {
         margin: theme.spacing(1),
         alignSelf: 'center',
         fontWeight: 500,
+        [theme.breakpoints.down('sm')]: {
+            margin: theme.spacing(-1),
+        },
     },
     container: {
         display: 'flex',
@@ -17,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'stretch',
         alignContent: 'center',
         marginLeft: theme.spacing(1),
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: theme.spacing(2),
+        },
     },
     large: {
         alignSelf: 'center',
@@ -39,12 +51,15 @@ function Members({ currentGroup, members, setMembers }) {
         setMembers(() => []);
         for (const id of Object.keys(currentGroup.value.members)) {
             const snap = await getUserById(id);
-            setMembers((previousMembers) => [...previousMembers, {...snap.val(), key: snap.key}]);
+            setMembers((previousMembers) => [
+                ...previousMembers,
+                { ...snap.val(), key: snap.key },
+            ]);
         }
     }, currentGroup?.key);
 
     return (
-        <Box display="flex" flexWrap={'wrap'}>
+        <Box display="flex" flexWrap={'wrap'} className={classes.root}>
             <Typography variant="h5" component="p" className={classes.title}>
                 Members
             </Typography>

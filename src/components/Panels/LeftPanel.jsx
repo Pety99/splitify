@@ -29,17 +29,26 @@ const useStyles = makeStyles((theme) => {
         paper: {
             display: 'flex',
             flexDirection: 'column',
-            padding: theme.spacing(2),
             textAlign: 'center',
             color: theme.palette.text.secondary,
             flex: '1 0 auto',
-            margin: theme.spacing(1),
+            [theme.breakpoints.up('md')]: {
+                margin: theme.spacing(1),
+                padding: theme.spacing(2),
+            },
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(1),
             height: '100%',
         },
         glass: glass,
         large: {
             //height: `calc(100% - ${dropzoneHeight} - 8px)`,
             height: 'auto',
+            [theme.breakpoints.down('sm')]: {
+                'box-shadow': 'none',
+                border: 'none',
+                background: 'none',
+            },
         },
         small: {
             height: `${dropzoneHeight}`,
@@ -64,6 +73,10 @@ const useStyles = makeStyles((theme) => {
             },
         },
         title: {
+            [theme.breakpoints.down('sm')]: {
+                marginTop: theme.spacing(3),
+                marginLeft: theme.spacing(-1),
+            },
             fontWeight: 500,
         },
     };
@@ -85,7 +98,11 @@ function LeftPanel(props) {
             <Paper
                 className={`${classes.paper} ${classes.small} ${classes.glass}`}
             >
-                <Uploader groupId={props.groupId} addSkeleton={addSkeleton} />
+                <Uploader
+                    groupId={props.groupId}
+                    addSkeleton={addSkeleton}
+                    className={classes.uploader}
+                />
             </Paper>
             <Paper
                 className={`${classes.paper} ${classes.large} ${classes.glass}`}
